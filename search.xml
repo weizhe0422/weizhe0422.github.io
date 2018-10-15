@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[gRPC 初介紹]]></title>
+    <url>%2F2018%2F10%2F15%2FgRPC-Section-1%2F</url>
+    <content type="text"><![CDATA[[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp; Microserviceshttps://www.udemy.com/grpc-golang/]]></content>
+      <tags>
+        <tag>Golang</tag>
+        <tag>筆記</tag>
+        <tag>gRPC</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[GolanNote_PkgVar]]></title>
     <url>%2F2018%2F04%2F18%2FGolanNote-PkgVar%2F</url>
     <content type="text"></content>
