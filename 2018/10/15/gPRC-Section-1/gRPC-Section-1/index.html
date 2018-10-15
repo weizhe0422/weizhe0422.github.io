@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Golang,筆記,gRPC," />
+  <meta name="keywords" content="筆記,Golang,gRPC," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp;amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用Gin-Gonic來實現HTTP接收SQL命令，然後把撈取結果回傳的想法，不過最近發現gRPC覺得十分有趣，所以去">
-<meta name="keywords" content="Golang,筆記,gRPC">
+<meta name="keywords" content="筆記,Golang,gRPC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gRPC 初介紹">
 <meta property="og:url" content="http://yoursite.com/2018/10/15/gPRC-Section-1/gRPC-Section-1/index.html">
@@ -88,7 +88,7 @@
 <meta property="og:description" content="[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp;amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用Gin-Gonic來實現HTTP接收SQL命令，然後把撈取結果回傳的想法，不過最近發現gRPC覺得十分有趣，所以去">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2018/10/15/gPRC-Section-1/gRPC-Section-1/gRPC_Cross_Platform.png">
-<meta property="og:updated_time" content="2018-10-15T15:04:42.001Z">
+<meta property="og:updated_time" content="2018-10-15T15:15:14.916Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gRPC 初介紹">
 <meta name="twitter:description" content="[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp;amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用Gin-Gonic來實現HTTP接收SQL命令，然後把撈取結果回傳的想法，不過最近發現gRPC覺得十分有趣，所以去">
@@ -383,8 +383,9 @@
         <p>[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp; Microservices<br><a href="https://www.udemy.com/grpc-golang/" target="_blank" rel="noopener">https://www.udemy.com/grpc-golang/</a></p>
 <p>因為最近在研究一個DB Middleware的計畫，原本打算利用Gin-Gonic來實現HTTP接收SQL命令，然後把撈取結果回傳的想法，不過最近發現gRPC覺得十分有趣，所以去Udemy找了課程，發現這個課程前顯易懂，所以打算好好來研究一下，看能否把gRPC的好處結合進來。</p>
 <p>過往RESTful的Web Service，Client端只有知道網址沒辦法知道得要給予哪些Input參數，當然現在有很多工具可以解決這樣的問題，例如：Swagger，但是實做起來卻沒有那麼簡單，而且當傳輸的資料量很大的時候，又會害怕掉資料的問題。</p>
-<p>而gRPC擁有的優點恰巧能解決，例如：支援Streaming傳輸，跨語言的溝通文件，gRPC是由Google所支援免費且open-sorce的框架，且他是Docker和Kubernetes的子計畫</p>
+<p>而gRPC擁有的優點恰巧能解決，例如：支援Streaming傳輸，跨語言的溝通文件：其中gRPC是由Google所支援免費且open-sorce的框架，目前他是屬於Docker和Kubernetes的子計畫，因為他架構在HTTP/2之上，故傳輸更快且更低延遲，並且如果你想要有log或是驗證功能，也都有現成的套件可以使用。</p>
 <p><img src="/2018/10/15/gPRC-Section-1/gRPC-Section-1/gRPC_Cross_Platform.png" alt="gRPC_Cross_Platform"><br></p>
+<p>剛剛提到的跨語言溝通文件，其語法為Protocol Buffers，並且並且當你安裝好gRPC tool的時候，就能根據撰寫好的文件產生合約文件供Server端與各Client端使用。</p>
 
       
     </div>
@@ -402,9 +403,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Golang/" rel="tag"># Golang</a>
-          
             <a href="/tags/筆記/" rel="tag"># 筆記</a>
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
           
             <a href="/tags/gRPC/" rel="tag"># gRPC</a>
           
