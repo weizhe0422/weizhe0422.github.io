@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[TIL_gRPC_Sec_1]]></title>
-    <url>%2F2018%2F10%2F15%2FTIL-gRPC-Sec-1%2F</url>
-    <content type="text"></content>
-      <tags>
-        <tag>Golang</tag>
-        <tag>筆記</tag>
-        <tag>gRPC</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[GolanNote_PkgVar]]></title>
     <url>%2F2018%2F04%2F18%2FGolanNote-PkgVar%2F</url>
     <content type="text"></content>
@@ -20,8 +10,8 @@
     <url>%2F2018%2F04%2F16%2FHexo-notes%2F</url>
     <content type="text"><![CDATA[基本操作: 發表新文章： Hexo new “檔案名“ Deploy: Hexo clean Hexo deploly -g]]></content>
       <tags>
-        <tag>筆記</tag>
         <tag>Hexo</tag>
+        <tag>筆記</tag>
       </tags>
   </entry>
   <entry>
@@ -29,8 +19,8 @@
     <url>%2F2018%2F04%2F12%2FGolangNote_Function%2F</url>
     <content type="text"><![CDATA[[參考]Appleboy於Udemy課程：Go 語言基礎實戰https://www.udemy.com/golang-fight/learn/v4/overview Function主要是用來將整體的程式碼做功能性的區分，降低整體程式碼的重複性，也提升程式碼的可讀性。 Golang的Function相較於其他的程式語言，我覺得最大的特點就是支持Multiple Return；例如當你建立一個公用Function供其他開發者使用時，你可以同時回傳兩個變數：一個是回傳值，另一個則是是否正常處理的布林值，如此當外部使用該Function的時候，就可以根據該布林值決定是否取該回傳值往下做處理。 Golang的Function可分為以下幾種： 單一回傳值123456789101112package mainimport ( "fmt")func add(i, j float32) float32 &#123; return i + j&#125;func main() &#123; fmt.Println(add(4.12, 5.67))&#125; 輸出結果9.79 多重回傳值 12345678910111213141516171819202122package mainimport ( "fmt")func div(divisor, dividend float32) (float32, bool) &#123; if dividend == 0 &#123; return 0, false &#125; return divisor / dividend, true&#125;func main() &#123; if divResult, returnCode := div(4.12, 5.67); returnCode &#123; fmt.Printf("The result of devision is %f", divResult) &#125; else &#123; fmt.Printf("Failed to get division result") &#125;&#125; 輸出結果The result of devision is 0.726631 回傳Function 123456789101112131415161718192021222324252627282930313233package mainimport ( "fmt")func doAction(a, b float32, method string) func() string &#123; if method == "add" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a+b) &#125; &#125; else if method == "sub" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a-b) &#125; &#125; else &#123; return func() string &#123; return fmt.Sprintln("The method parameter is invalid") &#125; &#125;&#125;func main() &#123; addMethod := doAction(1.11, 2.22, "add") subMethod := doAction(9.87, 6.54, "sub") devMethod := doAction(5.67, 7.43, "dev") fmt.Printf("Type of addMethod is %T \n", addMethod) fmt.Println(addMethod()) fmt.Printf("Type of subMethod is %T \n", subMethod) fmt.Println(subMethod()) fmt.Printf("Type of devMethod is %T \n", devMethod) fmt.Println(devMethod())&#125; 輸出結果Type of addMethod is func() stringThe add result is 3.330000Type of subMethod is func() stringThe add result is 3.330000Type of devMethod is func() stringThe method parameter is invalid Anonymous Function]]></content>
       <tags>
-        <tag>Golang</tag>
         <tag>筆記</tag>
+        <tag>Golang</tag>
       </tags>
   </entry>
   <entry>
