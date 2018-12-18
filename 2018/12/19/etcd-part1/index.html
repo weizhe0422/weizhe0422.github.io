@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Golang,筆記,etcd,TIL," />
 
 
 
@@ -79,13 +79,15 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="改變是前進的力量">
-<meta property="og:url" content="http://yoursite.com/tags/TIL/index.html">
+<meta name="keywords" content="Golang,筆記,etcd,TIL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="etcd Part 1">
+<meta property="og:url" content="http://yoursite.com/2018/12/19/etcd-part1/index.html">
 <meta property="og:site_name" content="改變是前進的力量">
 <meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-12-18T16:55:46.294Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="改變是前進的力量">
+<meta name="twitter:title" content="etcd Part 1">
 
 
 
@@ -115,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/TIL/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/19/etcd-part1/"/>
 
 
 
 
 
-  <title>標籤: TIL | 改變是前進的力量</title>
+  <title>etcd Part 1 | 改變是前進的力量</title>
   
 
 
@@ -140,7 +142,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -282,82 +284,162 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>TIL<small>標籤</small>
-        </h1>
-      </div>
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/19/etcd-part1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WeiZhe Chang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/image.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="改變是前進的力量">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">etcd Part 1</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2018-12-19T00:48:46+08:00">
+                2018-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/19/etcd-part1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="http://yoursite.com/2018/12/19/etcd-part1/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
 
       
         
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/12/19/etcd-part1/" itemprop="url">
-              
-                <span itemprop="name">etcd Part 1</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-12-19T00:48:46+08:00"
-              content="2018-12-19" >
-          12-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/15/gPRC-Section-1/gRPC-Section-1/" itemprop="url">
-              
-                <span itemprop="name">gRPC 初介紹</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-15T22:15:30+08:00"
-              content="2018-10-15" >
-          10-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
+          
+            <a href="/tags/筆記/" rel="tag"># 筆記</a>
+          
+            <a href="/tags/etcd/" rel="tag"># etcd</a>
+          
+            <a href="/tags/TIL/" rel="tag"># TIL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/15/gPRC-Section-1/gRPC-Section-1/" rel="next" title="gRPC 初介紹">
+                <i class="fa fa-chevron-left"></i> gRPC 初介紹
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -365,6 +447,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -581,6 +677,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -598,6 +698,18 @@
       <script id="dsq-count-scr" src="https://weizhe0422.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/12/19/etcd-part1/';
+          this.page.identifier = '2018/12/19/etcd-part1/';
+          this.page.title = 'etcd Part 1';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://weizhe0422.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
