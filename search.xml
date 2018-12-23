@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[LINE Tech Pulse 2018 參加心得]]></title>
+    <url>%2F2018%2F12%2F23%2FLINE-Tech-Pulse-2018%2F</url>
+    <content type="text"><![CDATA[這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，當你在網頁點擊想報名參加後，就會將你加入一個該活動的官方帳號中，報名者可以直接在Line的對話視窗中，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感；到了會場之後，參加者也只需要打開手機的藍牙就可以透過Line Beacon的連結完成報到的手續，即便進入會場需要排隊，但是其實等待不到15分鐘就可以順利進到會場。 一開始是由技術總監上台談到過去一年Line在AI, Link與LIFF(Line Front-end Framwork)上發揮很大的心力，讓Line不只是只有訊息或影片的傳遞，更可以做到更全面融入使用者生活，且讓開發者可以更輕易加入開發的可能性。 Development Efficieny Platform Framewokr CI/CD DevOp Reuse-Oriented Software Engineering Micrroservice for reuse PaaS for internal Platform Find out parner More flexiable message format: Flex Message: Even the grid view , video to show to send with line messgae Liff: avoid open another web browser, and link to web page in chat room generate a form to let user input, and feedback the result in once and save user to key the info for each question Notification Message from official and send to member and unblocked meber Switcher API: can easily switch between Phone API, Chatbot API and chatroom API BOT Deisgner: Build up chatroom prototype and chatroom usage experiance Flex Simulator: Simulate the message format to show to user LIFF Console: For eaily to use LIFF service New Chatbot Engine: NLU tool integrate in Line bot natively LINE THINGS: IoT technology on LINE, it linked all hardware things with LINEDevice support: Offline device with bluetooth(BLE) and online device with connect to internet capbilityApply case: use LINE on mobilephone to rempte television or auto detect whether the door is opend by unsafely.Apply case: Connect LIFF with weight scale, and when someone scale their weight, and it will auto push the result to LINE app. LINK: Line blockchain]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[etcd Part 1]]></title>
     <url>%2F2018%2F12%2F19%2Fetcd-part1%2F</url>
     <content type="text"></content>
