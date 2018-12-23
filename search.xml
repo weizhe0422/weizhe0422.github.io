@@ -3,16 +3,16 @@
   <entry>
     <title><![CDATA[LINE Tech Pulse 2018 參加心得]]></title>
     <url>%2F2018%2F12%2F23%2FLINE-Tech-Pulse-2018%2F</url>
-    <content type="text"><![CDATA[這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，當你在網頁點擊想報名參加後，就會將你加入一個該活動的官方帳號中，報名者可以直接在Line的對話視窗中，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感；到了會場之後，參加者也只需要打開手機的藍牙就可以透過Line Beacon的連結完成報到的手續，即便進入會場需要排隊，但是其實等待不到15分鐘就可以順利進到會場。 一開始是由技術總監上台談到過去一年Line在AI, Link與LIFF(Line Front-end Framwork)上發揮很大的心力，讓Line不只是只有訊息或影片的傳遞，更可以做到更全面融入使用者生活，且讓開發者可以更輕易加入開發的可能性。 Development Efficieny Platform Framewokr CI/CD DevOp Reuse-Oriented Software Engineering Micrroservice for reuse PaaS for internal Platform Find out parner More flexiable message format: Flex Message: Even the grid view , video to show to send with line messgae Liff: avoid open another web browser, and link to web page in chat room generate a form to let user input, and feedback the result in once and save user to key the info for each question Notification Message from official and send to member and unblocked meber Switcher API: can easily switch between Phone API, Chatbot API and chatroom API BOT Deisgner: Build up chatroom prototype and chatroom usage experiance Flex Simulator: Simulate the message format to show to user LIFF Console: For eaily to use LIFF service New Chatbot Engine: NLU tool integrate in Line bot natively LINE THINGS: IoT technology on LINE, it linked all hardware things with LINEDevice support: Offline device with bluetooth(BLE) and online device with connect to internet capbilityApply case: use LINE on mobilephone to rempte television or auto detect whether the door is opend by unsafely.Apply case: Connect LIFF with weight scale, and when someone scale their weight, and it will auto push the result to LINE app. LINK: Line blockchain]]></content>
+    <content type="text"><![CDATA[這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感； 到了會場之後，參加者也只需要打開手機的藍牙就可以透過Line Beacon的連結完成報到的手續，即便進入會場需要排隊，但是其實等待不到15分鐘就可以順利進到會場。 而且在會場中，有三個互動的遊戲，透過遊戲的方式展示Line在IoT方面應用，其中一個項目是使用者透過Line去與裝置註冊來加入Group，並且在遊戲結束後在Group內看自己的分數排名。![48414182_365065710967940_1656126779313618944_n](/2018/12/23/LINE-Tech-Pulse-2018/48414182_365065710967940_1656126779313618944_n.jpg) 一開始是由技術總監上台談到過去一年Line在AI, Link與LIFF(Line Front-end Framwork)上發揮很大的心力，讓Line不只是只有訊息或影片的傳遞，更可以做到更全面融入使用者生活，且讓開發者可以更輕易加入開發的可能性。 其中提到提到為了提高更多人加入Line的開發圈，他們致力於讓PaaS更加的完善，並且也努力讓Framework的內容更豐富；其中為了要達到Reuse-Oriented Software Engineering，所以Line也持續在將原有的東西變成Microservice來達到Reuse的效果，進而讓更多人加入來豐沛整個開發能量。 中間提到了近幾年很夯的Chatbot，我想這個是Line的強項，不過為了讓商家與使用者間有更好的互動，所以Line在Message API的LIFF提供更多的互動介面讓使用者有好的操作模式，其實講者提到LIFF的目的就是為了讓使用者不需要再去打開另一個瀏覽器來查看資訊，而是直接在對話視窗中來瀏覽網頁，並且可以針對問卷式的互動時，可以讓開發者針對問題的多寡決定呈現的方式，提高回答問題的流暢性。另外在互動介面上的新玩意即是透過Flex Message讓商家可以將資訊用Grid甚至是影片的方式去呈現商品的資訊，並且加上Rich Menu的方式提供給User比較清楚的選擇清單，而且這些特色的開發在於其資訊的格式並沒有太大的限定，可以讓商家自由呈現想要給使用者看的樣子。 並且開發者也可以透過Flex Simulator來看Message的呈現方式方便來做調整。 另一個吸引我注意的就是在IoT的部分，其中講者提到其可以分為兩個部分，其中一個是offline device的連線是透過藍芽的連結，而另一個online device則是透過internet的方式來傳輸，這裡透過體重計來當作生活中範例，使用者先將體重計與Line App做連結，然後就可以將每次量完體重的紀錄傳輸到Line的對話群組中，如果Device換成是血壓計或是其他設備，就能在老人居家照顧上起到較明顯的變化；另一個例子，就是連結家中的電器，例如冷氣，這樣使用者就可以將手機來遠端開啟冷氣，達到智慧家庭得目標。 另外，現在Line也在台北捷運建置Beacon，當旅客近到捷運站後就能主動接收到相關的訊息，例如新聞、天氣等資訊 還有一個不錯的題目就是講到測試的部分，以Line這樣的公司，每天的Change的頻繁度一定十分的高，如何確保每次上線後的品質，就是得透過軟體測試來達成，講者提到每一個Task的測試，都必須仰賴開發者與測試人員的合作與溝通，必須在一開始就確定好此次Change的變動範圍以及允收的Criteria，才有辦法開發者知道必須要達到什麼開發目標，並且測試人員才能針對完整功能建立好的Test Plan。！48398657_578348165950453_1527062552507318272_n！49128211_369158393847962_2314893909760671744_n 另外，講者也提到好的測試必須在開發者每開發完一個function後就進行Unite Test，如果等到全部完成才來做測試，通常都會有遺漏的部分，如果能在每一個function完成後就確保Unite Test的正確性，最後再進行Regression Test，這樣的軟體生命週期才會是比較有效率且完整的。！48968164_755579944818005_5977386284551766016_n]]></content>
   </entry>
   <entry>
     <title><![CDATA[etcd Part 1]]></title>
     <url>%2F2018%2F12%2F19%2Fetcd-part1%2F</url>
     <content type="text"></content>
       <tags>
-        <tag>筆記</tag>
-        <tag>Golang</tag>
         <tag>etcd</tag>
+        <tag>Golang</tag>
+        <tag>筆記</tag>
         <tag>TIL</tag>
       </tags>
   </entry>
@@ -21,8 +21,8 @@
     <url>%2F2018%2F10%2F15%2FgPRC-Section-1%2FgRPC-Section-1%2F</url>
     <content type="text"><![CDATA[[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用Gin-Gonic來實現HTTP接收SQL命令，然後把撈取結果回傳的想法，不過最近發現gRPC覺得十分有趣，所以去Udemy找了課程，發現這個課程前顯易懂，所以打算好好來研究一下，看能否把gRPC的好處結合進來。 過往RESTful的Web Service，Client端只有知道網址沒辦法知道得要給予哪些Input參數，當然現在有很多工具可以解決這樣的問題，例如：Swagger，但是實做起來卻沒有那麼簡單，而且當傳輸的資料量很大的時候，又會害怕掉資料的問題。 而gRPC擁有的優點恰巧能解決，例如：支援Streaming傳輸，跨語言的溝通文件：其中gRPC是由Google所支援免費且open-sorce的框架，目前他是屬於Docker和Kubernetes的子計畫，因為他架構在HTTP/2之上，故傳輸更快且更低延遲，並且如果你想要有log或是驗證功能，也都有現成的套件可以使用。 剛剛提到的跨語言溝通文件，其語法為Protocol Buffers，並且並且當你安裝好gRPC tool的時候，就能根據撰寫好的文件產生合約文件供Server端與各Client端使用。]]></content>
       <tags>
-        <tag>筆記</tag>
         <tag>Golang</tag>
+        <tag>筆記</tag>
         <tag>TIL</tag>
         <tag>gRPC</tag>
       </tags>
@@ -37,8 +37,8 @@
     <url>%2F2018%2F04%2F16%2FHexo-notes%2F</url>
     <content type="text"><![CDATA[基本操作: 發表新文章： Hexo new “檔案名“ Deploy: Hexo clean Hexo deploly -g]]></content>
       <tags>
-        <tag>Hexo</tag>
         <tag>筆記</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -46,8 +46,8 @@
     <url>%2F2018%2F04%2F12%2FGolangNote_Function%2F</url>
     <content type="text"><![CDATA[[參考]Appleboy於Udemy課程：Go 語言基礎實戰https://www.udemy.com/golang-fight/learn/v4/overview Function主要是用來將整體的程式碼做功能性的區分，降低整體程式碼的重複性，也提升程式碼的可讀性。 Golang的Function相較於其他的程式語言，我覺得最大的特點就是支持Multiple Return；例如當你建立一個公用Function供其他開發者使用時，你可以同時回傳兩個變數：一個是回傳值，另一個則是是否正常處理的布林值，如此當外部使用該Function的時候，就可以根據該布林值決定是否取該回傳值往下做處理。 Golang的Function可分為以下幾種： 單一回傳值123456789101112package mainimport ( "fmt")func add(i, j float32) float32 &#123; return i + j&#125;func main() &#123; fmt.Println(add(4.12, 5.67))&#125; 輸出結果9.79 多重回傳值 12345678910111213141516171819202122package mainimport ( "fmt")func div(divisor, dividend float32) (float32, bool) &#123; if dividend == 0 &#123; return 0, false &#125; return divisor / dividend, true&#125;func main() &#123; if divResult, returnCode := div(4.12, 5.67); returnCode &#123; fmt.Printf("The result of devision is %f", divResult) &#125; else &#123; fmt.Printf("Failed to get division result") &#125;&#125; 輸出結果The result of devision is 0.726631 回傳Function 123456789101112131415161718192021222324252627282930313233package mainimport ( "fmt")func doAction(a, b float32, method string) func() string &#123; if method == "add" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a+b) &#125; &#125; else if method == "sub" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a-b) &#125; &#125; else &#123; return func() string &#123; return fmt.Sprintln("The method parameter is invalid") &#125; &#125;&#125;func main() &#123; addMethod := doAction(1.11, 2.22, "add") subMethod := doAction(9.87, 6.54, "sub") devMethod := doAction(5.67, 7.43, "dev") fmt.Printf("Type of addMethod is %T \n", addMethod) fmt.Println(addMethod()) fmt.Printf("Type of subMethod is %T \n", subMethod) fmt.Println(subMethod()) fmt.Printf("Type of devMethod is %T \n", devMethod) fmt.Println(devMethod())&#125; 輸出結果Type of addMethod is func() stringThe add result is 3.330000Type of subMethod is func() stringThe add result is 3.330000Type of devMethod is func() stringThe method parameter is invalid Anonymous Function]]></content>
       <tags>
-        <tag>筆記</tag>
         <tag>Golang</tag>
+        <tag>筆記</tag>
       </tags>
   </entry>
   <entry>
