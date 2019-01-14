@@ -23,9 +23,9 @@
     <url>%2F2018%2F12%2F19%2Fetcd-part1%2F</url>
     <content type="text"></content>
       <tags>
+        <tag>筆記</tag>
         <tag>Golang</tag>
         <tag>TIL</tag>
-        <tag>筆記</tag>
         <tag>etcd</tag>
       </tags>
   </entry>
@@ -34,9 +34,9 @@
     <url>%2F2018%2F10%2F15%2FgPRC-Section-1%2FgRPC-Section-1%2F</url>
     <content type="text"><![CDATA[[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用Gin-Gonic來實現HTTP接收SQL命令，然後把撈取結果回傳的想法，不過最近發現gRPC覺得十分有趣，所以去Udemy找了課程，發現這個課程前顯易懂，所以打算好好來研究一下，看能否把gRPC的好處結合進來。 過往RESTful的Web Service，Client端只有知道網址沒辦法知道得要給予哪些Input參數，當然現在有很多工具可以解決這樣的問題，例如：Swagger，但是實做起來卻沒有那麼簡單，而且當傳輸的資料量很大的時候，又會害怕掉資料的問題。 而gRPC擁有的優點恰巧能解決，例如：支援Streaming傳輸，跨語言的溝通文件：其中gRPC是由Google所支援免費且open-sorce的框架，目前他是屬於Docker和Kubernetes的子計畫，因為他架構在HTTP/2之上，故傳輸更快且更低延遲，並且如果你想要有log或是驗證功能，也都有現成的套件可以使用。 剛剛提到的跨語言溝通文件，其語法為Protocol Buffers，並且並且當你安裝好gRPC tool的時候，就能根據撰寫好的文件產生合約文件供Server端與各Client端使用。]]></content>
       <tags>
+        <tag>筆記</tag>
         <tag>Golang</tag>
         <tag>TIL</tag>
-        <tag>筆記</tag>
         <tag>gRPC</tag>
       </tags>
   </entry>
@@ -50,8 +50,8 @@
     <url>%2F2018%2F04%2F16%2FHexo-notes%2F</url>
     <content type="text"><![CDATA[基本操作: 發表新文章： Hexo new “檔案名“ Deploy: Hexo clean Hexo deploly -g]]></content>
       <tags>
-        <tag>筆記</tag>
         <tag>Hexo</tag>
+        <tag>筆記</tag>
       </tags>
   </entry>
   <entry>
@@ -59,8 +59,8 @@
     <url>%2F2018%2F04%2F12%2FGolangNote_Function%2F</url>
     <content type="text"><![CDATA[[參考]Appleboy於Udemy課程：Go 語言基礎實戰https://www.udemy.com/golang-fight/learn/v4/overview Function主要是用來將整體的程式碼做功能性的區分，降低整體程式碼的重複性，也提升程式碼的可讀性。 Golang的Function相較於其他的程式語言，我覺得最大的特點就是支持Multiple Return；例如當你建立一個公用Function供其他開發者使用時，你可以同時回傳兩個變數：一個是回傳值，另一個則是是否正常處理的布林值，如此當外部使用該Function的時候，就可以根據該布林值決定是否取該回傳值往下做處理。 Golang的Function可分為以下幾種： 單一回傳值123456789101112package mainimport ( "fmt")func add(i, j float32) float32 &#123; return i + j&#125;func main() &#123; fmt.Println(add(4.12, 5.67))&#125; 輸出結果9.79 多重回傳值 12345678910111213141516171819202122package mainimport ( "fmt")func div(divisor, dividend float32) (float32, bool) &#123; if dividend == 0 &#123; return 0, false &#125; return divisor / dividend, true&#125;func main() &#123; if divResult, returnCode := div(4.12, 5.67); returnCode &#123; fmt.Printf("The result of devision is %f", divResult) &#125; else &#123; fmt.Printf("Failed to get division result") &#125;&#125; 輸出結果The result of devision is 0.726631 回傳Function 123456789101112131415161718192021222324252627282930313233package mainimport ( "fmt")func doAction(a, b float32, method string) func() string &#123; if method == "add" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a+b) &#125; &#125; else if method == "sub" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a-b) &#125; &#125; else &#123; return func() string &#123; return fmt.Sprintln("The method parameter is invalid") &#125; &#125;&#125;func main() &#123; addMethod := doAction(1.11, 2.22, "add") subMethod := doAction(9.87, 6.54, "sub") devMethod := doAction(5.67, 7.43, "dev") fmt.Printf("Type of addMethod is %T \n", addMethod) fmt.Println(addMethod()) fmt.Printf("Type of subMethod is %T \n", subMethod) fmt.Println(subMethod()) fmt.Printf("Type of devMethod is %T \n", devMethod) fmt.Println(devMethod())&#125; 輸出結果Type of addMethod is func() stringThe add result is 3.330000Type of subMethod is func() stringThe add result is 3.330000Type of devMethod is func() stringThe method parameter is invalid Anonymous Function]]></content>
       <tags>
-        <tag>Golang</tag>
         <tag>筆記</tag>
+        <tag>Golang</tag>
       </tags>
   </entry>
   <entry>
