@@ -25,8 +25,8 @@
       <tags>
         <tag>Golang</tag>
         <tag>TIL</tag>
-        <tag>筆記</tag>
         <tag>etcd</tag>
+        <tag>筆記</tag>
       </tags>
   </entry>
   <entry>
@@ -50,8 +50,8 @@
     <url>%2F2018%2F04%2F16%2FHexo-notes%2F</url>
     <content type="text"><![CDATA[基本操作: 發表新文章： Hexo new “檔案名“ Deploy: Hexo clean Hexo deploly -g]]></content>
       <tags>
-        <tag>Hexo</tag>
         <tag>筆記</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
