@@ -378,12 +378,23 @@
       
         
           
-            <p>網路上其實很多教學文是告訴你怎麼用Golang建立一個API Service，其提供GET或POST讓人呼叫，不過我自己是比較少看到結合靜態網頁來跟使用者互動，所以才會想把學習的東西記錄下來，也分享給大家。</p>
+            <p>GitHub位置：<a href="https://github.com/weizhe0422/ApiServerWithHTML.git" target="_blank" rel="noopener">https://github.com/weizhe0422/ApiServerWithHTML.git</a></p>
+<p>網路上其實很多教學文是告訴你怎麼用Golang建立一個API Service，其提供GET或POST讓人呼叫，不過我自己是比較少看到結合靜態網頁來跟使用者互動，所以才會想把學習的東西記錄下來，也分享給大家。</p>
 <p>最終結果會像下圖，使用者輸入兩組Key與Value，最後透過GET方式向Api Service取得剛剛輸入的資訊。<br><img src="/2019/01/14/ApiServerWithHTMLExample/FinalResult.png" alt="FinalResult"></p>
 <p>整個資料夾結構會把API Service與靜態網頁分開來放<br><img src="/2019/01/14/ApiServerWithHTMLExample/FolderStructure.png" alt="FolderStructure"></p>
 <p>我們開始來建立一個Http Server來開啟服務吧！ 首先，我們先initial一個Mux，並且加上預計提供服務的路由網址，以及對應的Function。<br><img src="/2019/01/14/ApiServerWithHTMLExample/httpMux.png" alt="httpMux"></p>
-<p>因為是要做示範，所以我們這邊的Handle Function內容主要是接收GET的Request，並且檢查傳進來參數對，然後再把它回覆回去。<br>在這個Function中需要注意到，當我們用req.URL.Query()來取得傳入的參數時，需要注意到回傳的型態為“map[string][]string”，也就是說如果傳入多個相同Key值時，他會存在同一個Key值下。 因為目標想把Input的鍵值對回傳回去，所以我們透過foreach將其串成一個字串，最後將其寫入http.ResponseWriter。<br><img src="/2019/01/14/ApiServerWithHTMLExample/handleDisplay.png" alt="handleDisplay"></p>
-<p>接著，開始初始化一個Http Server，並且給予一些初始值，例如讀與寫的Time Out時間，以及將會Handle哪一個Mux。 當然Listener不可缺少，給予要使用Protocol以及將會聽哪一個Port，並且別忘記Handle一下初始化Listner可能會發生錯誤。 最後，別忘了搭配Go Routine來監聽Request。<br><img src="/2019/01/14/ApiServerWithHTMLExample/HttpServer.png" alt="HttpServer"><br><img src="/2019/01/14/ApiServerWithHTMLExample/ListenAndServe.png" alt="ListenAndServe"></p>
+<p>因為是要做示範，所以我們這邊的Handle Function內容主要是接收GET的Request，並且檢查傳進來參數對，然後再把它回覆回去。 在這個Function中需要注意到，當我們用req.URL.Query()來取得傳入的參數時，需要注意到回傳的型態為“map[string][]string”，也就是說如果傳入多個相同Key值時，他會存在同一個Key值下。 因為目標想把Input的鍵值對回傳回去，所以我們透過foreach將其串成一個字串，最後將其寫入http.ResponseWriter。<br><img src="/2019/01/14/ApiServerWithHTMLExample/handleDisplay.png" alt="handleDisplay"></p>
+<p>接著，開始初始化一個Http Server，並且給予一些初始值，例如讀與寫的Time Out時間，以及將會Handle哪一個Mux。<br><img src="/2019/01/14/ApiServerWithHTMLExample/HttpServer.png" alt="HttpServer"></p>
+<p>當然Listener不可缺少，給予要使用Protocol以及將會聽哪一個Port，並且別忘記Handle一下初始化Listner可能會發生錯誤。 別忘了搭配Go Routine來監聽Request。<br><img src="/2019/01/14/ApiServerWithHTMLExample/ListenAndServe.png" alt="ListenAndServe"></p>
+<p>截至目前為止，我們已經建立一個可以成功運行的API Service，接下來就是要寫一個靜態網頁來串接這個Service。</p>
+<p>因為想要讓畫面看起來有些互動，並且看起來有美化效果，所以我們用了bootstrap，詳細內容可以參考六角學院(<a href="https://bootstrap.hexschool.com/docs/4.1/getting-started/introduction/)做的翻譯，裡面寫得非常詳細，很值得參考。" target="_blank" rel="noopener">https://bootstrap.hexschool.com/docs/4.1/getting-started/introduction/)做的翻譯，裡面寫得非常詳細，很值得參考。</a></p>
+<p>首先，引入JQuery、CSS與Boostrap，其連結可以參考：<a href="https://www.bootcdn.cn/。" target="_blank" rel="noopener">https://www.bootcdn.cn/。</a><br><img src="/2019/01/14/ApiServerWithHTMLExample/JQeryCSSBoostrap.png" alt="JQeryCSSBoostrap"></p>
+<p>接著，可以透過boostrap中的”互動視窗 (Modal)”來點擊一個按鈕後跳出一個輸入的對話視窗，並且搭配input-group來讓使用者知道要分別輸入兩組鍵值對。<br><a href="https://bootstrap.hexschool.com/docs/4.0/components/modal/" target="_blank" rel="noopener">https://bootstrap.hexschool.com/docs/4.0/components/modal/</a><br><a href="https://bootstrap.hexschool.com/docs/4.0/components/input-group/" target="_blank" rel="noopener">https://bootstrap.hexschool.com/docs/4.0/components/input-group/</a><br><img src="/2019/01/14/ApiServerWithHTMLExample/ModalAndInputGroup.png" alt="ModalAndInputGroup"></p>
+<p>最後一個階段，就是把這個網頁與我們的API Serice結合起來。</p>
+<p>再次打開API Service，我們要來在Http Server同步把剛剛寫的靜態網頁也加載進來；一開始先指定靜態網頁儲存的資料夾，因為我們放在同一專案的webPage資料夾下，故將其寫在http.Dir；接著，透過http.FileServer將其資料夾下的靜態網頁變成Handler，最後再透過mux.Handle來載入。 這邊得要注意到，因為我們是在網址後的”/“來加載這個index.html，故需要先把原先Handler的”/“先移除(http.StripPrefix)，然後再傳入，才不會發生找不到網頁的狀況。<br><img src="/2019/01/14/ApiServerWithHTMLExample/HttpServerHTML.png" alt="HttpServerHTML"></p>
+<p>最後的最後，我們要來在index.html編寫Ajax來呼叫API Service。先找到剛剛“送出”按鈕的id，然後在”click“事件下啟動對應的function，其function我們設定欲呼叫的Router位置、呼叫的Method、傳入的data型態以及成功(success)後要做什麼事情。 AjaxCallService透過alert的方式讓它顯示出來。<br>![AjaxCallService]</p>
+<p>這邊要注意到，因為我們是以JQuey利用ajax非同步呼叫API Service，但這邊我碰到一個問題，即便有呼叫成功，且使用console也拿到Status Code=200，但是還是沒辦法拿到ResponseText，其原因ajax為非同步運作，故當網頁發完請求後，script就往下執行了，並不會等待回傳，但ResponsText會在瀏覽器即時的解析，這樣根本來不及解析完就結束了。 所以，我們這邊把async設定為flase，讓他必須等待ResponseText被解析完後才往下走。 如此就能讓結果呈現出來。<br>參考：：<a href="http://radio-idea.blogspot.com/2012/02/note-for-jquery-ajaxresponsetext.html" target="_blank" rel="noopener">http://radio-idea.blogspot.com/2012/02/note-for-jquery-ajaxresponsetext.html</a></p>
+<p>第一次寫教學文，希望大家見諒很多贅詞，也希望能夠稍微幫助到大家！  我們下次見。</p>
 
           
         
