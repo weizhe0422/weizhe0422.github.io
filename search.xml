@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[20分鐘小教室：用Golang建立一個Api Service，並與靜態網頁互動]]></title>
     <url>%2F2019%2F01%2F14%2FApiServerWithHTMLExample%2F</url>
-    <content type="text"><![CDATA[網路上其實很多教學文是告訴你怎麼用Golang建立一個API Service，其提供GET或POST讓人呼叫，不過我自己是比較少看到結合靜態網頁來跟使用者互動，所以才會想把學習的東西記錄下來，也分享給大家。 最終結果會像下圖，使用者輸入兩組Key與Value，最後透過GET方式向Api Service取得剛剛輸入的資訊。 整個資料夾結構會把API Service與靜態網頁分開來放 我們開始來建立一個Http Server來開啟服務吧！ 首先，我們先initial一個Mux，並且加上預計提供服務的路由網址，以及對應的Function。![httpMux] 因為是要做示範，所以我們這邊的Handle Function內容主要是接收GET的Request，並且檢查傳進來參數對，然後再把它回覆回去。在這個Function中需要注意到，當我們用req.URL.Query()來取得傳入的參數時，需要注意到回傳的型態為“map[string][]string”，也就是說如果傳入多個相同Key值時，他會存在同一個Key值下。 因為目標想把Input的鍵值對回傳回去，所以我們透過foreach將其串成一個字串，最後將其寫入http.ResponseWriter。![handleDisplay] 接著，開始初始化一個Http Server，並且給予一些初始值，例如讀與寫的Time Out時間，以及將會Handle哪一個Mux。 當然Listener不可缺少，給予要使用Protocol以及將會聽哪一個Port，並且別忘記Handle一下初始化Listner可能會發生錯誤。 最後，別忘了搭配Go Routine來監聽Request。![HttpServer]![ListenAndServe]]]></content>
+    <content type="text"><![CDATA[網路上其實很多教學文是告訴你怎麼用Golang建立一個API Service，其提供GET或POST讓人呼叫，不過我自己是比較少看到結合靜態網頁來跟使用者互動，所以才會想把學習的東西記錄下來，也分享給大家。 最終結果會像下圖，使用者輸入兩組Key與Value，最後透過GET方式向Api Service取得剛剛輸入的資訊。 整個資料夾結構會把API Service與靜態網頁分開來放 我們開始來建立一個Http Server來開啟服務吧！ 首先，我們先initial一個Mux，並且加上預計提供服務的路由網址，以及對應的Function。 因為是要做示範，所以我們這邊的Handle Function內容主要是接收GET的Request，並且檢查傳進來參數對，然後再把它回覆回去。在這個Function中需要注意到，當我們用req.URL.Query()來取得傳入的參數時，需要注意到回傳的型態為“map[string][]string”，也就是說如果傳入多個相同Key值時，他會存在同一個Key值下。 因為目標想把Input的鍵值對回傳回去，所以我們透過foreach將其串成一個字串，最後將其寫入http.ResponseWriter。 接著，開始初始化一個Http Server，並且給予一些初始值，例如讀與寫的Time Out時間，以及將會Handle哪一個Mux。 當然Listener不可缺少，給予要使用Protocol以及將會聽哪一個Port，並且別忘記Handle一下初始化Listner可能會發生錯誤。 最後，別忘了搭配Go Routine來監聽Request。]]></content>
       <tags>
         <tag>Golang</tag>
         <tag>20分鐘小教室</tag>
