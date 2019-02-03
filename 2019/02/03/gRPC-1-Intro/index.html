@@ -104,12 +104,12 @@
 <meta property="og:site_name" content="改變是前進的力量">
 <meta property="og:description" content="[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp;amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用gin-gonic這套Http Framework架構，使用Post接收SQL Command，然後把撈取結果回傳">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:image" content="http://yoursite.com/2019/02/03/gPRC-Section-1/Platform.png">
-<meta property="og:updated_time" content="2019-02-03T04:51:42.860Z">
+<meta property="og:image" content="http://yoursite.com/2019/02/03/gPRC-1-Intro/gRPC_Platform.png">
+<meta property="og:updated_time" content="2019-02-03T04:52:53.750Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gRPC 1. 初介紹">
 <meta name="twitter:description" content="[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp;amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用gin-gonic這套Http Framework架構，使用Post接收SQL Command，然後把撈取結果回傳">
-<meta name="twitter:image" content="http://yoursite.com/2019/02/03/gPRC-Section-1/Platform.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/03/gPRC-1-Intro/gRPC_Platform.png">
 
 
 
@@ -338,7 +338,7 @@
                 
               
 
-              <time title="Created: 2019-02-03 12:50:02 / Modified: 12:51:42" itemprop="dateCreated datePublished" datetime="2019-02-03T12:50:02+08:00">2019-02-03</time>
+              <time title="Created: 2019-02-03 12:50:02 / Modified: 12:52:53" itemprop="dateCreated datePublished" datetime="2019-02-03T12:50:02+08:00">2019-02-03</time>
             
 
             
@@ -381,7 +381,7 @@
 <p>因為最近在研究一個DB Middleware的計畫，原本打算利用gin-gonic這套Http Framework架構，使用Post接收SQL Command，然後把撈取結果回傳給User，不過最近發現gRPC覺得十分有趣，所以去Udemy找了課程，發現這個課程前顯易懂，所以打算好好來研究一下，看能否把gRPC的好處結合進來。</p>
 <p>過往RESTful的Web Service，Client端與Server端的兩個開發者必須Align清楚每一個Service的Input參數名稱，甚至是資料型態都必須確認，當然現在有很多工具可以解決這樣的問題，例如：Swagger，但是實做起來卻沒有那麼簡單，而且當傳輸的資料量很大的時候，又會害怕掉資料的問題。</p>
 <p>gRPC即是因應解決這些問題而生，他於2015年由Google所支援免費且open-sorce的框架，他是基於Protocol Buffers所開發出來的RPC框架，其擁有的優點恰巧能解決上面提到的問題，例如：支援Streaming傳輸，跨語言的溝通文件：其中，目前他是屬於Docker和Kubernetes的子計畫，因為他架構在HTTP/2之上，故傳輸更快且更低延遲，並且如果你想要有log或是驗證功能，也都有現成的套件可以使用。</p>
-<p><img src="/2019/02/03/gPRC-Section-1/Platform.png" alt="Platform"><br></p>
+<p><img src="/2019/02/03/gPRC-1-Intro/gRPC_Platform.png" alt="Platform"><br></p>
 <p>剛剛提到的跨語言溝通文件，其語法為Protocol Buffers，並且並且當你安裝好gRPC tool的時候，就能根據撰寫好的文件產生合約文件供Server端與各Client端使用。</p>
 
       
