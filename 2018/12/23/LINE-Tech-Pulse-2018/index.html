@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-tw">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: 'E0GP3JU3DN',
+      apiKey: '552b074debe2b2c5c435f3471cc0f11f',
+      indexName: 'weizheblog',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LINE Tech Pulse 2018 參加心得">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/index.html">
+<meta property="og:site_name" content="改變是前進的力量">
+<meta property="og:description" content="這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48407954_1944142775683584_562751294004002816_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48991654_1912887425476598_147234588463202304_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48414182_365065710967940_1656126779313618944_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48394237_352020325585703_6935609787690254336_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48415751_366381887461292_8556255511459135488_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/49008949_2238397723110196_933723901580541952_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/49183630_1957733824263622_1665617802339287040_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/2018-12-239.41.18.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48408629_309600776324090_2528886051078930432_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48398657_578348165950453_1527062552507318272_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/49128211_369158393847962_2314893909760671744_n.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48968164_755579944818005_5977386284551766016_n.jpg">
+<meta property="og:updated_time" content="2018-12-23T14:32:14.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LINE Tech Pulse 2018 參加心得">
+<meta name="twitter:description" content="這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/48407954_1944142775683584_562751294004002816_n.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>LINE Tech Pulse 2018 參加心得 | 改變是前進的力量</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">改變是前進的力量</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Change is the power of progress</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>About</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>Tags</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>Categories</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>Archives</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br/>Sitemap</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WeiZhe Chang"/>
+      <meta itemprop="description" content=""/>
+      <meta itemprop="image" content="/images/avatar.gif"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="改變是前進的力量"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LINE Tech Pulse 2018 參加心得
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-12-23 20:13:26 / Modified: 22:32:14" itemprop="dateCreated datePublished" datetime="2018-12-23T20:13:26+08:00">2018-12-23</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/12/23/LINE-Tech-Pulse-2018/48407954_1944142775683584_562751294004002816_n.jpg" alt="48407954_1944142775683584_562751294004002816_n"></p>
+<p>這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。</p>
+<p>其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感；<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48991654_1912887425476598_147234588463202304_n.jpg" alt="48991654_1912887425476598_147234588463202304_n"></p>
+<p>到了會場之後，參加者也只需要打開手機的藍牙就可以透過Line Beacon的連結完成報到的手續，即便進入會場需要排隊，但是其實等待不到15分鐘就可以順利進到會場。 而且在會場中，有三個互動的遊戲，透過遊戲的方式展示Line在IoT方面應用，其中一個項目是使用者透過Line去與裝置註冊來加入Group，並且在遊戲結束後在Group內看自己的分數排名。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48414182_365065710967940_1656126779313618944_n.jpg" alt="48414182_365065710967940_1656126779313618944_n"></p>
+<p>一開始是由技術總監上台談到過去一年Line在AI, Link與LIFF(Line Front-end Framwork)上發揮很大的心力，讓Line不只是只有訊息或影片的傳遞，更可以做到更全面融入使用者生活，且讓開發者可以更輕易加入開發的可能性。</p>
+<p>其中提到提到為了提高更多人加入Line的開發圈，他們致力於讓PaaS更加的完善，並且也努力讓Framework的內容更豐富；其中為了要達到Reuse-Oriented Software Engineering，所以Line也持續在將原有的東西變成Microservice來達到Reuse的效果，進而讓更多人加入來豐沛整個開發能量。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48394237_352020325585703_6935609787690254336_n.jpg" alt="48394237_352020325585703_6935609787690254336_n"></p>
+<p>中間提到了近幾年很夯的Chatbot，我想這個是Line的強項，不過為了讓商家與使用者間有更好的互動，所以Line在Message API的LIFF提供更多的互動介面讓使用者有好的操作模式，其實講者提到LIFF的目的就是為了讓使用者不需要再去打開另一個瀏覽器來查看資訊，而是直接在對話視窗中來瀏覽網頁，並且可以針對問卷式的互動時，可以讓開發者針對問題的多寡決定呈現的方式，提高回答問題的流暢性。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48415751_366381887461292_8556255511459135488_n.jpg" alt="48415751_366381887461292_8556255511459135488_n"><br>另外在互動介面上的新玩意即是透過Flex Message讓商家可以將資訊用Grid甚至是影片的方式去呈現商品的資訊，並且加上Rich Menu的方式提供給User比較清楚的選擇清單，而且這些特色的開發在於其資訊的格式並沒有太大的限定，可以讓商家自由呈現想要給使用者看的樣子。 並且開發者也可以透過Flex Simulator來看Message的呈現方式方便來做調整。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/49008949_2238397723110196_933723901580541952_n.jpg" alt="49008949_2238397723110196_933723901580541952_n"><br><img src="/2018/12/23/LINE-Tech-Pulse-2018/49183630_1957733824263622_1665617802339287040_n.jpg" alt="49183630_1957733824263622_1665617802339287040_n"><br><img src="/2018/12/23/LINE-Tech-Pulse-2018/2018-12-239.41.18.png" alt="2018-12-239.41.18"></p>
+<p> 另一個吸引我注意的就是在IoT的部分，其中講者提到其可以分為兩個部分，其中一個是offline device的連線是透過藍芽的連結，而另一個online device則是透過internet的方式來傳輸，這裡透過體重計來當作生活中範例，使用者先將體重計與Line App做連結，然後就可以將每次量完體重的紀錄傳輸到Line的對話群組中，如果Device換成是血壓計或是其他設備，就能在老人居家照顧上起到較明顯的變化；另一個例子，就是連結家中的電器，例如冷氣，這樣使用者就可以將手機來遠端開啟冷氣，達到智慧家庭得目標。 另外，現在Line也在台北捷運建置Beacon，當旅客近到捷運站後就能主動接收到相關的訊息，例如新聞、天氣等資訊<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48408629_309600776324090_2528886051078930432_n.jpg" alt="48408629_309600776324090_2528886051078930432_n"></p>
+<p>還有一個不錯的題目就是講到測試的部分，以Line這樣的公司，每天的Change的頻繁度一定十分的高，如何確保每次上線後的品質，就是得透過軟體測試來達成，講者提到每一個Task的測試，都必須仰賴開發者與測試人員的合作與溝通，必須在一開始就確定好此次Change的變動範圍以及允收的Criteria，才有辦法開發者知道必須要達到什麼開發目標，並且測試人員才能針對完整功能建立好的Test Plan。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48398657_578348165950453_1527062552507318272_n.jpg" alt="48398657_578348165950453_1527062552507318272_n"><br><img src="/2018/12/23/LINE-Tech-Pulse-2018/49128211_369158393847962_2314893909760671744_n.jpg" alt="49128211_369158393847962_2314893909760671744_n"></p>
+<p>另外，講者也提到好的測試必須在開發者每開發完一個function後就進行Unite Test，如果等到全部完成才來做測試，通常都會有遺漏的部分，如果能在每一個function完成後就確保Unite Test的正確性，最後再進行Regression Test，這樣的軟體生命週期才會是比較有效率且完整的。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48968164_755579944818005_5977386284551766016_n.jpg" alt="48968164_755579944818005_5977386284551766016_n"></p>
+<p>最後，能夠參加這個會議真的獲益良多，今年的牌子前面的Guest，希望明年能夠有機會前面能夠不再寫G~  哈！</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/19/etcd-part1/" rel="next" title="etcd Part 1">
+                <i class="fa fa-chevron-left"></i> etcd Part 1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/14/ApiServerWithHTMLExample/" rel="prev" title="20分鐘小教室：用Golang建立一個Api Service，並與靜態網頁互動">
+                20分鐘小教室：用Golang建立一個Api Service，並與靜態網頁互動 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">WeiZhe Chang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WeiZhe Chang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script src="/js/src/js.cookie.js?v=6.7.0"></script>
+  <script src="/js/src/scroll-cookie.js?v=6.7.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
