@@ -112,7 +112,7 @@
 <meta property="og:description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRCP_Unary.png">
-<meta property="og:updated_time" content="2019-02-10T06:44:36.612Z">
+<meta property="og:updated_time" content="2019-02-10T06:48:20.924Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20分鐘小教室：gRPC-2-Unary">
 <meta name="twitter:description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
@@ -430,7 +430,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-10 14:44:36" itemprop="dateModified" datetime="2019-02-10T14:44:36+08:00">2019-02-10</time>
+                <time title="Modified: 2019-02-10 14:48:20" itemprop="dateModified" datetime="2019-02-10T14:48:20+08:00">2019-02-10</time>
               
             
           </span>
@@ -466,47 +466,32 @@
       
         <p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="20分鐘小教室：gRPC 1. 初介紹">20分鐘小教室：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p>
 <p>關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID。</p>
-<p> <em>Step 1. 定義.proto文件</em></p>
-<pre><code>- 撰寫.proto文件時，可以分為幾個區塊
-    1. 第一個是文件格式定義，其中
-        - syntax: proto buffer版本，因為目前最新為第三版，故可以直接給予proto3
-        - package: 表這份文件所屬的package，這邊我們用與檔名相同
-        - go_package: 表在用Golang語言開發時引入的package名稱，我們用pb作為名稱來與其他package區分。
-    {% codeblock lang:protobuf%}
-        syntax = "proto3";
-
-        package lookup;
-
-        option go_package = "pb";
-        {% endcodeblock%}
-
-    2. 接下來，就開始撰寫邏輯的部分，我們可以分為兩個大部分
-        - message: 定義溝通的參數介面，這邊要注意到
-            - 變數間必須給予順序編號
-            - 變數的類型包含double, float, int32, int64, bool, string, bytes等，與各語言對應的關係可以參考：https://developers.google.com/protocol-buffers/docs/proto3#scalar
-        - service: 定義溝通的function介面，這邊這邊要注意到
-            - 可以透過service名稱來區隔不同的service type，例如：OrderService、CheckOutService與Shipservice就可以分開來定義
-            - 每一個service內的function name需以rpc開頭，並且將input與output介面定義上去，之後會用到串流方式傳輸資料，就可以在參數前加上stream關鍵字
-    {% codeblock lang:protobuf%}
-        message LookingUp {
-            string first_name = 1;
-            string last_name = 2;
-        }
-
-        message LookUpRequest {
-            LookingUp lookingUp = 1;
-        }
-
-        message LookUpResponse {
-            int32 result = 1;
-        }
-
-        service LookUpService{
-            //unary
-            rpc LookUp(LookUpRequest) returns (LookUpResponse) {};
-        }
-        {% endcodeblock%}
-</code></pre><p> <em>Step 2. 將.proto文件做Compile</em><br> <em>Step 3. 開發Server端程式</em><br> <em>Step 4. 開發Client端程式</em><br> <em>Step 5. 測試連接</em></p>
+<p> <em>Step 1. 定義.proto文件</em><br>撰寫.proto文件時，可以分為幾個區塊</p>
+<ol>
+<li><p>第一個是文件格式定義，其中</p>
+<ul>
+<li>syntax: proto buffer版本，因為目前最新為第三版，故可以直接給予proto3</li>
+<li>package: 表這份文件所屬的package，這邊我們用與檔名相同</li>
+<li>go_package: 表在用Golang語言開發時引入的package名稱，我們用pb作為名稱來與其他package區分。<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> lookup;</span><br><span class="line"></span><br><span class="line"><span class="keyword">option</span> go_package = <span class="string">"pb"</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>接下來，就開始撰寫邏輯的部分，我們可以分為兩個大部分</p>
+<ul>
+<li>message: 定義溝通的參數介面，這邊要注意到<ul>
+<li>變數間必須給予順序編號</li>
+<li>變數的類型包含double, float, int32, int64, bool, string, bytes等，與各語言對應的關係可以參考：<a href="https://developers.google.com/protocol-buffers/docs/proto3#scalar" target="_blank" rel="noopener">https://developers.google.com/protocol-buffers/docs/proto3#scalar</a></li>
+</ul>
+</li>
+<li>service: 定義溝通的function介面，這邊這邊要注意到<ul>
+<li>可以透過service名稱來區隔不同的service type，例如：OrderService、CheckOutService與Shipservice就可以分開來定義</li>
+<li>每一個service內的function name需以rpc開頭，並且將input與output介面定義上去，之後會用到串流方式傳輸資料，就可以在參數前加上stream關鍵字<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">message LookingUp &#123;</span><br><span class="line">    string first_name = 1;</span><br><span class="line">    string last_name = 2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpRequest &#123;</span><br><span class="line">    LookingUp lookingUp = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpResponse &#123;</span><br><span class="line">    int32 result = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service LookUpService&#123;</span><br><span class="line">    //unary</span><br><span class="line">    rpc LookUp(LookUpRequest) returns (LookUpResponse) &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<em>Step 2. 將.proto文件做Compile</em><br><em>Step 3. 開發Server端程式</em><br><em>Step 4. 開發Client端程式</em><br><em>Step 5. 測試連接</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
