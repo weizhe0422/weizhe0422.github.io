@@ -151,9 +151,9 @@
     
       <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
     
-      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
-    
       <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
     
       <category term="etcd" scheme="http://yoursite.com/tags/etcd/"/>
     
@@ -203,9 +203,9 @@
       <category term="Hexo" scheme="http://yoursite.com/categories/Hexo/"/>
     
     
-      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
-    
       <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
     
   </entry>
   
