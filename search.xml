@@ -1,17 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[TIL：gRPC-2-Unary]]></title>
+    <url>%2F2019%2F02%2F03%2FgRPC-2-Unary%2F</url>
+    <content type="text"><![CDATA[繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID，下圖為這個範例的資料夾結構。 Step 1. 定義.proto文件撰寫.proto文件時，可以分為幾個區塊 第一個是文件格式定義，其中 syntax: proto buffer版本，因為目前最新為第三版，故可以直接給予proto3 package: 表這份文件所屬的package，這邊我們用與檔名相同 go_package: 表在用Golang語言開發時引入的package名稱，我們用pb作為名稱來與其他package區分。12345syntax = "proto3";package lookup;option go_package = "pb"; 接下來，就開始撰寫邏輯的部分，我們可以分為兩個大部分 message: 定義溝通的參數介面，這邊要注意到 變數間必須給予順序編號 變數的類型包含double, float, int32, int64, bool, string, bytes等，與各語言對應的關係可以參考：https://developers.google.com/protocol-buffers/docs/proto3#scalar service: 定義溝通的function介面，這邊這邊要注意到 可以透過service名稱來區隔不同的service type，例如：OrderService、CheckOutService與Shipservice就可以分開來定義 每一個service內的function name需以rpc開頭，並且將input與output介面定義上去，之後會用到串流方式傳輸資料，就可以在參數前加上stream關鍵字 1234567891011121314151617message LookingUp &#123; string first_name = 1; string last_name = 2;&#125;message LookUpRequest &#123; LookingUp lookingUp = 1;&#125;message LookUpResponse &#123; int32 result = 1;&#125;service LookUpService&#123; //unary rpc LookUp(LookUpRequest) returns (LookUpResponse) &#123;&#125;;&#125; Step 2. 將.proto文件做Compile 安裝protobuf的工具，並且記得將該路徑加入到$GOPATH/bin 1go get -u github.com/golang/protobuf/protoc-gen-go 然後切換到專案的資料夾下後，輸入下面的command，如果沒有發生錯誤，就可以在/pb中發現多了一個檔案，其副檔名.pb.go。 1protoc Lookupservice/Unary/pb/lookup.proto --go_out=plugins=grpc:. Step 3. 開發Server端程式 首先，先建立一個模擬的data table，讓client呼叫時可以達到查詢的效果 1234567891011121314151617181920212223type MyDataTable struct &#123; ID int32 Name string&#125;var ( recordTable []MyDataTable)func InitData() &#123; recordTable = make([]MyDataTable, 0) recordTable = append(recordTable, MyDataTable&#123; ID: 13579, Name: "WeiZhe", &#125;) recordTable = append(recordTable, MyDataTable&#123; ID: 24680, Name: "Ray", &#125;)&#125; 我們先來定義一個structure，他會包含與Client溝通的function 我們先到剛剛產生的lookup.pb.go檔案找尋到下面這段，這代表LookUpServiceServer這個interface中有一個function等待我們去implement，我們把LookUp(context.Context, *LookUpRequest) (*LookUpResponse, error)複製起來 1234type LookUpServiceServer interface &#123;//unaryLookUp(context.Context, *LookUpRequest) (*LookUpResponse, error)&#125; 回到server.go，先宣告一個structure 然後，將剛剛從lookup.pb.go複製的function附屬於剛剛宣告的structure，來讓我們來implement他 一開始貼上會出現錯誤，這是因為function中的名稱是附屬於lookup.pb.go下，故記得補上pb.即可。 implement的邏輯即是for loop查詢recordTable 這個slice，然後比對如果有與傳進來的req.LookingUp.FirstName相同，則return查到的ID，否則回傳error message說明找不到。 傳進來的參數可以透過*pb.LookUpRequest來查詢 回傳的*pb.LookUpResponse是一個structure，所以我們需要將結果組裝起來成相同類型：記得回傳的需要是一個位址類型。12345678910111213141516171819202122232425262728293031type serviceSvr struct&#123;&#125;func (s *serviceSvr) LookUp(ctx context.Context, req *pb.LookUpRequest) (response *pb.LookUpResponse, err error) &#123; var ( firstName string lookUpResp *pb.LookUpResponse content MyDataTable result int32 ) log.Printf("LookUp function invoked by %v", req) log.Println(recordTable) firstName = req.LookingUp.FirstName result = -1 for _, content = range recordTable &#123; log.Println(content.Name, "/", firstName) if content.Name == firstName &#123; result = content.ID break &#125; &#125; if result == -1 &#123; return nil, errors.New("failed to find ID, please check first name again") &#125; lookUpResp = &amp;pb.LookUpResponse&#123; Result: result, &#125; return lookUpResp, nil&#125; 定義完service中function的邏輯後，我們來初始化一個gRPC的Server 先建立一個listener，並且用tcp監聽著port: 5005112345if listener, err = net.Listen("tcp", ":50051"); err != nil &#123; log.Fatalf("failed to create a listener: %v", err) return&#125; 首先引入gRPC package: google.golang.org/grpc，接著呼叫NewServer就能成功初始一個gRPC Server 接著，引入/pb資料夾後，就可以參考到剛剛透過protoc產生的RegisterLookUpServiceServer function，在這邊把我們剛剛初始成功的gRPC:grpcSvr與上一個步驟產生的serviceSvr這個綁有LookUp function的structure: &amp;serviceSvr{}綁上去。 最後，我們將gRPC server開始launch起來，就開始正式服務了。12345678grpcSvr = grpc.NewServer()pb.RegisterLookUpServiceServer(grpcSvr, &amp;serviceSvr&#123;&#125;)if err = grpcSvr.Serve(listener); err != nil &#123; log.Fatalf("failed to serve gRPC: %v", err) return&#125; Step 4. 開發Client端程式 接著，我們可以開始來開發client的程式，相較於server端，client端的開發較為簡單 首先，一樣引入google.golang.org/grpc，然後使用Dial function來與server進行溝通 第一個參數填入server端的位址 第二個參數填入Dial function的選項，通常都是grpc.With開頭，這邊因為我們只是基本功能實現，所以就不用到SSL驗證，故填入grpc.WithInsecure()：當然如果你有多個功i能要打開，你可以看到後面是一個interface，只要把要選項附加上去即可。 記得養成好習慣，一但打開connection，就要加上defer來將這個connection做close。 然後，引入github.com/weizhe0422/gRPC/LookupService/Unary/pb，就可以參考到NewLookUpServiceClient function，並且把我們剛剛初始的connection傳進去，並得到一個gRPC Client的變數。 12345if conn, err = grpc.Dial(":50051", grpc.WithInsecure()); err != nil &#123; log.Fatalf("failed to coneect to gRPC server: %v", err)&#125;defer conn.Close()client = pb.NewLookUpServiceClient(conn) client端的最後一步就是開始呼叫server端的function並得到回應 我們先把剛剛gRPC Client的變數傳到一個function來實作 其中function實作中 把request的資料組成pb.LookUpRequest類型 使用Client變數中protoBuf定義的function name，並傳入context與剛剛組成的pb.LookUpRequest類型資料 接著就可以拿到該function回傳的response結果1234567891011121314151617181920212223doUnary(client, firstName, lastName)func doUnary(client pb.LookUpServiceClient, firstName, lastName string)&#123; var( lookUpReq *pb.LookUpRequest lookUpResp *pb.LookUpResponse err error ) lookUpReq = &amp;pb.LookUpRequest&#123; LookingUp: &amp;pb.LookingUp&#123; FirstName:firstName, LastName:lastName, &#125;, &#125; if lookUpResp, err = client.LookUp(context.Background(),lookUpReq); err!=nil&#123; log.Fatalf("failed to send LookUp: %v", err) &#125; fmt.Println("LookUp result: ", lookUpResp.Result)&#125; Step 5. 測試連接 切換到server端與client端的資料夾，並且各自將其run起來，就可以看到Client端成功從server查詢到first_name於data table中的編號。 至此已經完成第一個gRPC類型的開發，後面三個類型都是這個類型的些微變化就可以實現成功，所以如果能把這些步驟做到熟悉，後面的範例就能夠更快上手囉！ 我們下個章節見啦！]]></content>
+      <categories>
+        <category>gRPC</category>
+      </categories>
+      <tags>
+        <tag>Golang</tag>
+        <tag>TIL</tag>
+        <tag>gRPC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[TIL：gRPC 1. 初介紹]]></title>
+    <url>%2F2019%2F02%2F03%2FgRPC-1-Intro%2F</url>
+    <content type="text"><![CDATA[[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp; Microserviceshttps://www.udemy.com/grpc-golang/ 因為最近在研究一個DB Middleware的計畫，原本打算利用gin-gonic這套Http Framework架構，使用Post接收SQL Command，然後把撈取結果回傳給User，不過最近發現gRPC覺得十分有趣，所以去Udemy找了課程，發現這個課程前顯易懂，所以打算好好來研究一下，看能否把gRPC的好處結合進來。 過往RESTful的Web Service，Client端與Server端的兩個開發者必須Align清楚每一個Service的Input參數名稱，甚至是資料型態都必須確認，當然現在有很多工具可以解決這樣的問題，例如：Swagger，但是實做起來卻沒有那麼簡單，而且當傳輸的資料量很大的時候，又會害怕掉資料的問題。 gRPC即是因應解決這些問題而生，他於2015年由Google所支援免費且open-sorce的框架，他是基於Protocol Buffers所開發出來的RPC框架，其擁有的優點恰巧能解決上面提到的問題，例如：支援Streaming傳輸，跨語言的溝通文件：其中，目前他是屬於Docker和Kubernetes的子計畫，因為他架構在HTTP/2之上，故傳輸更快且更低延遲，並且如果你想要有log或是驗證功能，也都有現成的套件可以使用。 剛剛提到的跨語言溝通文件，即是指Protocol Buffers，這是由Google定義的數據描述語言(其他如XML與JSON)，在文件中同時也會定義Request與Response參數的參數內容與Data type，並且目前有多個程式語言有第三方套件可以支援(如: Golang, C, Python等)，而且使用起來也很簡單，只要你安裝好gRPC tool後，就能根據撰寫好的文件產生合約文件供Server端與各Client端使用。 於gRPC架構中的Server與Client溝通方式分為四種，分別為Unary、Server Streaming、Client Streaming與Bidirectional Streaming，其中Unary就是傳統的溝通方式Server會等待Client送完Request Data，然後再一包把處理結果回傳，但有了Streaming的支持，就可以根據不同的目標需求，將Server與Client的data透過Streaming方式將資料送出，如前面提到的DB Middileware計畫，即是想應用Server Straming方式，把從Oracle撈回來的資料分批的傳回給Client端。]]></content>
+      <categories>
+        <category>gRPC</category>
+      </categories>
+      <tags>
+        <tag>Golang</tag>
+        <tag>TIL</tag>
+        <tag>gRPC</tag>
+        <tag>20分鐘小教室：</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[20分鐘小教室：用Golang建立一個Api Service，並與靜態網頁互動]]></title>
+    <url>%2F2019%2F01%2F14%2FApiServerWithHTMLExample%2F</url>
+    <content type="text"><![CDATA[GitHub位置：https://github.com/weizhe0422/ApiServerWithHTML.git 網路上其實很多教學文是告訴你怎麼用Golang建立一個API Service，其提供GET或POST讓人呼叫，不過我自己是比較少看到結合靜態網頁來跟使用者互動，所以才會想把學習的東西記錄下來，也分享給大家。 最終結果會像下圖，使用者輸入兩組Key與Value，最後透過GET方式向Api Service取得剛剛輸入的資訊。 整個資料夾結構會把API Service與靜態網頁分開來放 我們開始來建立一個Http Server來開啟服務吧！ 首先，我們先initial一個Mux，並且加上預計提供服務的路由網址，以及對應的Function。 因為是要做示範，所以我們這邊的Handle Function內容主要是接收GET的Request，並且檢查傳進來參數對，然後再把它回覆回去。 在這個Function中需要注意到，當我們用req.URL.Query()來取得傳入的參數時，需要注意到回傳的型態為“map[string][]string”，也就是說如果傳入多個相同Key值時，他會存在同一個Key值下。 因為目標想把Input的鍵值對回傳回去，所以我們透過foreach將其串成一個字串，最後將其寫入http.ResponseWriter。 接著，開始初始化一個Http Server，並且給予一些初始值，例如讀與寫的Time Out時間，以及將會Handle哪一個Mux。 當然Listener不可缺少，給予要使用Protocol以及將會聽哪一個Port，並且別忘記Handle一下初始化Listner可能會發生錯誤。 別忘了搭配Go Routine來監聽Request。 截至目前為止，我們已經建立一個可以成功運行的API Service，接下來就是要寫一個靜態網頁來串接這個Service。 因為想要讓畫面看起來有些互動，並且看起來有美化效果，所以我們用了bootstrap，詳細內容可以參考六角學院(https://bootstrap.hexschool.com/docs/4.1/getting-started/introduction/)做的翻譯，裡面寫得非常詳細，很值得參考。 首先，引入JQuery、CSS與Boostrap，其連結可以參考：https://www.bootcdn.cn/。 接著，可以透過boostrap中的”互動視窗 (Modal)”來點擊一個按鈕後跳出一個輸入的對話視窗，並且搭配input-group來讓使用者知道要分別輸入兩組鍵值對。https://bootstrap.hexschool.com/docs/4.0/components/modal/https://bootstrap.hexschool.com/docs/4.0/components/input-group/ 最後一個階段，就是把這個網頁與我們的API Serice結合起來。 再次打開API Service，我們要來在Http Server同步把剛剛寫的靜態網頁也加載進來；一開始先指定靜態網頁儲存的資料夾，因為我們放在同一專案的webPage資料夾下，故將其寫在http.Dir；接著，透過http.FileServer將其資料夾下的靜態網頁變成Handler，最後再透過mux.Handle來載入。 這邊得要注意到，因為我們是在網址後的”/“來加載這個index.html，故需要先把原先Handler的”/“先移除(http.StripPrefix)，然後再傳入，才不會發生找不到網頁的狀況。 最後的最後，我們要來在index.html編寫Ajax來呼叫API Service。先找到剛剛“送出”按鈕的id，然後在”click“事件下啟動對應的function，其function我們設定欲呼叫的Router位置、呼叫的Method、傳入的data型態以及成功(success)後要做什麼事情。 AjaxCallService透過alert的方式讓它顯示出來。![AjaxCallService] 這邊要注意到，因為我們是以JQuey利用ajax非同步呼叫API Service，但這邊我碰到一個問題，即便有呼叫成功，且使用console也拿到Status Code=200，但是還是沒辦法拿到ResponseText，其原因ajax為非同步運作，故當網頁發完請求後，script就往下執行了，並不會等待回傳，但ResponsText會在瀏覽器即時的解析，這樣根本來不及解析完就結束了。 所以，我們這邊把async設定為flase，讓他必須等待ResponseText被解析完後才往下走。 如此就能讓結果呈現出來。參考：：http://radio-idea.blogspot.com/2012/02/note-for-jquery-ajaxresponsetext.html 第一次寫教學文，希望大家見諒很多贅詞，也希望能夠稍微幫助到大家！ 我們下次見。]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Golang</tag>
+        <tag>20分鐘小教室</tag>
+        <tag>Ajax</tag>
+        <tag>HTML</tag>
+        <tag>API Service</tag>
+        <tag>TIL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[LINE Tech Pulse 2018 參加心得]]></title>
     <url>%2F2018%2F12%2F23%2FLINE-Tech-Pulse-2018%2F</url>
     <content type="text"><![CDATA[這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。 其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感； 到了會場之後，參加者也只需要打開手機的藍牙就可以透過Line Beacon的連結完成報到的手續，即便進入會場需要排隊，但是其實等待不到15分鐘就可以順利進到會場。 而且在會場中，有三個互動的遊戲，透過遊戲的方式展示Line在IoT方面應用，其中一個項目是使用者透過Line去與裝置註冊來加入Group，並且在遊戲結束後在Group內看自己的分數排名。 一開始是由技術總監上台談到過去一年Line在AI, Link與LIFF(Line Front-end Framwork)上發揮很大的心力，讓Line不只是只有訊息或影片的傳遞，更可以做到更全面融入使用者生活，且讓開發者可以更輕易加入開發的可能性。 其中提到提到為了提高更多人加入Line的開發圈，他們致力於讓PaaS更加的完善，並且也努力讓Framework的內容更豐富；其中為了要達到Reuse-Oriented Software Engineering，所以Line也持續在將原有的東西變成Microservice來達到Reuse的效果，進而讓更多人加入來豐沛整個開發能量。 中間提到了近幾年很夯的Chatbot，我想這個是Line的強項，不過為了讓商家與使用者間有更好的互動，所以Line在Message API的LIFF提供更多的互動介面讓使用者有好的操作模式，其實講者提到LIFF的目的就是為了讓使用者不需要再去打開另一個瀏覽器來查看資訊，而是直接在對話視窗中來瀏覽網頁，並且可以針對問卷式的互動時，可以讓開發者針對問題的多寡決定呈現的方式，提高回答問題的流暢性。另外在互動介面上的新玩意即是透過Flex Message讓商家可以將資訊用Grid甚至是影片的方式去呈現商品的資訊，並且加上Rich Menu的方式提供給User比較清楚的選擇清單，而且這些特色的開發在於其資訊的格式並沒有太大的限定，可以讓商家自由呈現想要給使用者看的樣子。 並且開發者也可以透過Flex Simulator來看Message的呈現方式方便來做調整。 另一個吸引我注意的就是在IoT的部分，其中講者提到其可以分為兩個部分，其中一個是offline device的連線是透過藍芽的連結，而另一個online device則是透過internet的方式來傳輸，這裡透過體重計來當作生活中範例，使用者先將體重計與Line App做連結，然後就可以將每次量完體重的紀錄傳輸到Line的對話群組中，如果Device換成是血壓計或是其他設備，就能在老人居家照顧上起到較明顯的變化；另一個例子，就是連結家中的電器，例如冷氣，這樣使用者就可以將手機來遠端開啟冷氣，達到智慧家庭得目標。 另外，現在Line也在台北捷運建置Beacon，當旅客近到捷運站後就能主動接收到相關的訊息，例如新聞、天氣等資訊 還有一個不錯的題目就是講到測試的部分，以Line這樣的公司，每天的Change的頻繁度一定十分的高，如何確保每次上線後的品質，就是得透過軟體測試來達成，講者提到每一個Task的測試，都必須仰賴開發者與測試人員的合作與溝通，必須在一開始就確定好此次Change的變動範圍以及允收的Criteria，才有辦法開發者知道必須要達到什麼開發目標，並且測試人員才能針對完整功能建立好的Test Plan。 另外，講者也提到好的測試必須在開發者每開發完一個function後就進行Unite Test，如果等到全部完成才來做測試，通常都會有遺漏的部分，如果能在每一個function完成後就確保Unite Test的正確性，最後再進行Regression Test，這樣的軟體生命週期才會是比較有效率且完整的。 最後，能夠參加這個會議真的獲益良多，今年的牌子前面的Guest，希望明年能夠有機會前面能夠不再寫G~ 哈！]]></content>
+      <categories>
+        <category>conference</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[etcd Part 1]]></title>
+    <url>%2F2018%2F12%2F19%2Fetcd-part1%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>etcd</category>
+      </categories>
       <tags>
-        <tag>[object Object]</tag>
+        <tag>Golang</tag>
+        <tag>TIL</tag>
+        <tag>筆記</tag>
+        <tag>etcd</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[GolanNote_PkgVar]]></title>
     <url>%2F2018%2F04%2F18%2FGolanNote-PkgVar%2F</url>
     <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Hexo 使用小記]]></title>
+    <url>%2F2018%2F04%2F16%2FHexo-notes%2F</url>
+    <content type="text"><![CDATA[基本操作: 發表新文章： Hexo new “檔案名“ Deploy: Hexo clean Hexo deploly -g]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>筆記</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[「Golang筆記」Function]]></title>
+    <url>%2F2018%2F04%2F12%2FGolangNote_Function%2F</url>
+    <content type="text"><![CDATA[[參考]Appleboy於Udemy課程：Go 語言基礎實戰https://www.udemy.com/golang-fight/learn/v4/overview Function主要是用來將整體的程式碼做功能性的區分，降低整體程式碼的重複性，也提升程式碼的可讀性。 Golang的Function相較於其他的程式語言，我覺得最大的特點就是支持Multiple Return；例如當你建立一個公用Function供其他開發者使用時，你可以同時回傳兩個變數：一個是回傳值，另一個則是是否正常處理的布林值，如此當外部使用該Function的時候，就可以根據該布林值決定是否取該回傳值往下做處理。 Golang的Function可分為以下幾種： 單一回傳值123456789101112package mainimport ( "fmt")func add(i, j float32) float32 &#123; return i + j&#125;func main() &#123; fmt.Println(add(4.12, 5.67))&#125; 輸出結果9.79 多重回傳值 12345678910111213141516171819202122package mainimport ( "fmt")func div(divisor, dividend float32) (float32, bool) &#123; if dividend == 0 &#123; return 0, false &#125; return divisor / dividend, true&#125;func main() &#123; if divResult, returnCode := div(4.12, 5.67); returnCode &#123; fmt.Printf("The result of devision is %f", divResult) &#125; else &#123; fmt.Printf("Failed to get division result") &#125;&#125; 輸出結果The result of devision is 0.726631 回傳Function 123456789101112131415161718192021222324252627282930313233package mainimport ( "fmt")func doAction(a, b float32, method string) func() string &#123; if method == "add" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a+b) &#125; &#125; else if method == "sub" &#123; return func() string &#123; return fmt.Sprintf("The add result is %f", a-b) &#125; &#125; else &#123; return func() string &#123; return fmt.Sprintln("The method parameter is invalid") &#125; &#125;&#125;func main() &#123; addMethod := doAction(1.11, 2.22, "add") subMethod := doAction(9.87, 6.54, "sub") devMethod := doAction(5.67, 7.43, "dev") fmt.Printf("Type of addMethod is %T \n", addMethod) fmt.Println(addMethod()) fmt.Printf("Type of subMethod is %T \n", subMethod) fmt.Println(subMethod()) fmt.Printf("Type of devMethod is %T \n", devMethod) fmt.Println(devMethod())&#125; 輸出結果Type of addMethod is func() stringThe add result is 3.330000Type of subMethod is func() stringThe add result is 3.330000Type of devMethod is func() stringThe method parameter is invalid Anonymous Function]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Golang</tag>
+        <tag>筆記</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[TestPost]]></title>
