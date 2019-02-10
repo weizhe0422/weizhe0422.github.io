@@ -1,0 +1,295 @@
+{#
+Copyright (C) 2018 Jamal Chen
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <title>{{ info.name.english }}</title>
+  </head>
+  <body>
+    <div class="container" id="cv">
+      <!-- side Penal -->
+      <div id="side">
+      <!-- BASIC INFO -->
+      <div id="info">
+        {% if info.picture is defined %}
+        <div id="photo"><img src="{{ info.picture }}"></div>
+        {% endif %}
+        <div id="name"><h1 class="text-center">
+        {{ info.name }} {% if info.alias is defined %}{{ info.alias }}{% endif %}
+        {% if info.tags is defined %}
+        <br/><span>{% for item in info.tags %}{{ item }}{{ " / " if not loop.last }}{% endfor %}</span>
+        {% endif %}
+        </h1></div>
+      </div>
+      <!-- CONTACT -->
+      <div class="box clearfix" id="contact">
+      <h2 class="text-left"><i class="fa fa-bullseye ico"></i> Contact</h2>
+      {% if contact.location is defined %}
+      <div class="contact-item">
+        <div class="icon pull-left text-center"><span class="fa fa-map-marker fa-fw"></span></div>
+        <div class="title pull-right">{{ contact.location.address }}</div>
+        <div class="title pull-right">{{ contact.location.city }}, {{ contact.location.postalCode }} {{ contact.location.country }}</div>
+      </div>
+      {% endif %}
+
+      {% if contact.phone is defined %}
+      <div class="contact-item">
+        <div class="icon pull-left text-center"><span class="fa fa-phone fa-fw"></span></div>
+        {% for phone in contact.phone %}
+          <div class="title {% if contact.phone|length == 1 %} only {% endif %} pull-right">{{ phone }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if contact.email is defined %}
+      <div class="contact-item">
+        <div class="icon pull-left text-center"><span class="fa fa-envelope fa-fw"></span></div>
+        <div class="title only pull-right"><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></div>
+      </div>
+      {% endif %}
+
+      {% if contact.profiles is defined %}
+      {% for profile in contact.profiles %}
+        {% if profile.network == "facebook" %}
+        <div class="contact-item">
+          <div class="icon pull-left text-center"><span class="fa fa-facebook fa-fw"></span></div>
+          <div class="title only pull-right"><a href="https://{{ profile.url }}">{{ profile.url }}</a></div>
+        </div>
+        {% endif %}
+        {% if profile.network == "linkedin" %}
+        <div class="contact-item">
+          <div class="icon pull-left text-center"><span class="fa fa-linkedin fa-fw"></span></div>
+          <div class="title only pull-right"><a href="https://{{ profile.url }}">{{ profile.url }}</a></div>
+        </div>
+        {% endif %}
+        {% if profile.network == "github" %}
+        <div class="contact-item">
+          <div class="icon pull-left text-center"><span class="fa fa-github fa-fw"></span></div>
+          <div class="title only pull-right"><a href="https://{{ profile.url }}">{{ profile.url }}</a></div>
+        </div>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+      </div>
+      <!-- EDUCATION -->
+      {% if educations is defined %}
+      <div class="box" id="educations">
+        <h2><i class="fa fa-certificate ico"></i> Education</h2>
+        <ul id="education_list" class="clearfix">
+          {% for degree in educations %}
+          <li>
+            <div class="date pull-left">{{ degree.date }}</div>
+            <div class="description pull-right">
+              <h3>{{ degree.university }}, {{ degree.location }}</h3>
+              <p><i class="fa fa-graduation-cap ico"></i>{{ degree.degree }} of {{ degree.area }}</p>
+              {% if degree.gpa is defined %}
+              <p>GPA: {{ degree.gpa }}</p>
+              {% endif %}
+              {% if degree.thesis is defined %}
+              <h4>Thesis: </h4>
+              <p>{{ degree.thesis }}</p>
+              {% endif %}
+              </p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <!-- LANGUAGES -->
+      {% if languages is defined %}
+      <div class="box" id="languages">
+        <h2><i class="fa fa-language ico"></i> Languages</h2>
+        <ul class="list-group">
+          {% for language in languages %}
+          <li class="list-group-item">
+          <i class="fa fa-chevron-circle-right ico"></i> {{ language.language }}
+          <span class="skill badge pull-right">{{ language.fluency }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <!-- SKILLS -->
+      {% if skills is defined %}
+      <div class="box" id="skills">
+        <h2><i class="fa fa-wrench ico"></i> Skills</h2>
+        <ul class="list-group">
+          {% for skill in skills %}
+          <li class="list-group-item"></i>
+            <h3 class="skill-item">{{ skill.name }}
+              <span class="skill badge pull-right">{{ skill.level }}</span>
+            </h3>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <!-- REFERENCES -->
+      {% if references is defined %}
+      <div class="box" id="references">
+        <h2><i class="fa fa-check-square ico"></i> References</h2>
+        {% for reference in references %}
+        <div class="description"><h3>{{ reference.name }}</h3>
+        <p>{{ reference.position }}</p>
+        <p style="margin: 0px;">{{ reference.department }}</p>
+        <p>{{ reference.organization }}</p>
+        <p>{{ reference.phone }}</p>
+        <a href="mailto:{{ reference.email }}">{{ reference.email }}</a>
+        </div><br/>
+        {% endfor %}
+      </div>
+      {% endif %}
+      </div>
+
+      <!-- Main Penal -->
+      <div id="main">
+      <!-- SUMMARY -->
+      {% if summary is defined %}
+      <div class="box" id="summary">
+        <h2><i class="fa fa-user ico"></i> Summary</h2>
+        <div id="summary_detail">
+        <p>{{ summary.description }}</p>
+        {% if summary.highlights is defined %}
+          <p>I am also ... </p>
+          <ul class="list-group" id="summary_hl">
+          {% for highlight in summary.highlights %}
+            <li class="list-group-item"><i class="fa fa-check-square ico"></i> {{ highlight }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      <!-- WORK EXPERIENCE -->
+      {% if experiences is defined %}
+      <div class="box" id="experiences">
+        <h2><i class="fa fa-suitcase ico"></i> Work Experiences</h2>
+        {% for experience in experiences %}
+        <div class="job_org">
+          <h3>{{ experience.organization }}, {{ experience.location }}</h3>
+          <p class="date">{{ experience.date }}</p>
+        </div>
+        <div class="job_detail">
+          <h3 class="job_title">{{ experience.position }}, {{ experience.department }}</h3>
+          <p class="target" style="font-weight: 400;">{{ experience.target }}</p>
+          {% if experience.highlights is defined %}
+          <h4>Highlights</h4>
+          <ul class="list-group">
+            {% for highlight in experience.highlights %}
+              <li class="list-group-item"><i class="fa fa-check-circle ico"></i> {{ highlight }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <!-- JOURNALS -->
+      {% if journals is defined %}
+      <div class="box" id="journals">
+        <h2><i class="fa fa-book ico"></i> Journals</h2>
+        <div class="journal panel panel-default">
+          {% for journal in journals %}
+          <div class="panel-heading">
+            <div class="name panel-title">{{ journal.title }}</div>
+          </div>
+          <div class="panel-body">
+            <div class="authors">{{ journal.authors }}</div>
+            <div class="journal_detail">
+              <i>{{ journal.journal }}</i> ({{ journal.date }})
+              {% if journal.volume is defined %}
+              {{ journal.volume }}
+              {% endif %}
+              {% if journal.number is defined %}
+              :{{ journal.number }}
+              {% endif %}
+              {% if journal.page is defined %}
+              , pages {{ journal.page }}
+              {% endif %}.
+            </div>
+            {% if journal.website is defined %}
+            <div class="website">
+              <a href="{{ journal.website }}"><i class="fa fa-globe ico"></i> {{ journal.website }}</a>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <!-- AWARDS -->
+      {% if awards is defined %}
+      <div class="box" id="awards">
+        <h2><i class="fa fa-certificate ico"></i> Awards</h2>
+        <ul id="award_list" class="clearfix">
+          {% for award in awards %}
+          <li>
+            <div class="date pull-left">{{ award.date }}</div>
+            <div class="description pull-right">
+              <h3>{{ award.title }}</h3>
+              <p><i class="fa fa-trophy ico"></i>{{ award.awarder }}</p>
+              {% if award.description is defined %}
+              <p>{{ award.description }}</p>
+              {% endif %}
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <!-- PROJECTS -->
+      {% if projects is defined %}
+      <div class="box" id="projects">
+        <h2><i class="fa fa-tasks ico"></i> Projects</h2>
+        <div class="panel panel-default">
+          {% for project in projects %}
+          <div class="panel-heading">
+            <div class="name panel-title">{{ project.name }}</div>
+          </div>
+          <div class="panel-body">
+            {% if project.url is defined %}
+            <div class="url">
+              <a href="{{ project.url }}"><i class="fa fa-globe ico"></i> {{ project.url }}</a>
+            </div>
+            {% endif %}
+            {% if project.summary is defined %}
+            <p>{{ project.summary }}</p>
+            {% endif %}
+            {% if project.highlights is defined %}
+              <h3>Highlights</h3>
+              <ul class="list-group">
+              {% for highlight in project.highlights %}
+                <li class="list-group-item"><i class="fa fa-chevron-circle-right ico"></i> {{ highlight }}</li>
+              {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
