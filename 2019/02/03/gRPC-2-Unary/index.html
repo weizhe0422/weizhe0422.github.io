@@ -103,20 +103,20 @@
 
 
 
-  <meta name="description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
-<meta name="keywords" content="Golang,20分鐘小教室,TIL,gRPC">
+  <meta name="description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟">
+<meta name="keywords" content="Golang,TIL,gRPC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="20分鐘小教室：gRPC-2-Unary">
+<meta property="og:title" content="TIL：gRPC-2-Unary">
 <meta property="og:url" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/index.html">
 <meta property="og:site_name" content="改變是前進的力量">
-<meta property="og:description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
+<meta property="og:description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRCP_Unary.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/project_structure.png">
-<meta property="og:updated_time" content="2019-02-10T07:10:27.912Z">
+<meta property="og:updated_time" content="2019-02-10T08:10:04.501Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="20分鐘小教室：gRPC-2-Unary">
-<meta name="twitter:description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
+<meta name="twitter:title" content="TIL：gRPC-2-Unary">
+<meta name="twitter:description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟">
 <meta name="twitter:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRCP_Unary.png">
 
 
@@ -134,7 +134,7 @@
   };
 </script>
 
-  <title>20分鐘小教室：gRPC-2-Unary | 改變是前進的力量</title>
+  <title>TIL：gRPC-2-Unary | 改變是前進的力量</title>
   
 
 
@@ -388,7 +388,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">20分鐘小教室：gRPC-2-Unary
+          <h1 class="post-title" itemprop="name headline">TIL：gRPC-2-Unary
 
               
             
@@ -431,7 +431,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-10 15:10:27" itemprop="dateModified" datetime="2019-02-10T15:10:27+08:00">2019-02-10</time>
+                <time title="Modified: 2019-02-10 16:10:04" itemprop="dateModified" datetime="2019-02-10T16:10:04+08:00">2019-02-10</time>
               
             
           </span>
@@ -465,7 +465,7 @@
       
 
       
-        <p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="20分鐘小教室：gRPC 1. 初介紹">20分鐘小教室：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p>
+        <p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="TIL：gRPC 1. 初介紹">TIL：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p>
 <p>關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 </p>
 <p>所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID，下圖為這個範例的資料夾結構。<br><img src="/2019/02/03/gRPC-2-Unary/project_structure.png"></p>
 <p><em>Step 1. 定義.proto文件</em><br>撰寫.proto文件時，可以分為幾個區塊</p>
@@ -499,11 +499,43 @@
 <li><p>安裝protobuf的工具，並且記得將該路徑加入到$GOPATH/bin</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/golang/protobuf/protoc-gen-go</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>然後切換到專案的資料夾下後，輸入下面的command，如果沒有發生錯誤，就可以在/pb中發現多了一個檔案，其副檔名.pb.go。</p>
+<li><p>然後切換到專案的資料夾下後，輸入下面的command，如果沒有發生錯誤，就可以在<code>/pb</code>中發現多了一個檔案，其副檔名<code>.pb.go</code>。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc Lookupservice/Unary/pb/lookup.proto --go_out=plugins=grpc:.</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><em>Step 3. 開發Server端程式</em><br><em>Step 4. 開發Client端程式</em><br><em>Step 5. 測試連接</em></p>
+<p><em>Step 3. 開發Server端程式</em></p>
+<ol>
+<li>首先，先建立一個模擬的data table，讓client呼叫時可以達到查詢的效果<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyDataTable <span class="keyword">struct</span> &#123;</span><br><span class="line">    ID   <span class="keyword">int32</span></span><br><span class="line">    Name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    recordTable []MyDataTable</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InitData</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    recordTable = <span class="built_in">make</span>([]MyDataTable, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    recordTable = <span class="built_in">append</span>(recordTable, MyDataTable&#123;</span><br><span class="line">        ID:   <span class="number">13579</span>,</span><br><span class="line">        Name: <span class="string">"WeiZhe"</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    recordTable = <span class="built_in">append</span>(recordTable, MyDataTable&#123;</span><br><span class="line">        ID:   <span class="number">24680</span>,</span><br><span class="line">        Name: <span class="string">"Ray"</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+<li>我們先來定義一個structure，他會包含與Client溝通的function</li>
+</ol>
+<ul>
+<li><p>我們先到剛剛產生的<code>lookup.pb.go</code>檔案找尋到下面這段，這代表LookUpServiceServer這個interface中有一個function等待我們去implement，我們把<code>LookUp(context.Context, *LookUpRequest) (*LookUpResponse, error)</code>複製起來</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> LookUpServiceServer <span class="keyword">interface</span> &#123;</span><br><span class="line"><span class="comment">//unary</span></span><br><span class="line">LookUp(context.Context, *LookUpRequest) (*LookUpResponse, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>回到server.go，先宣告一個structure</p>
+</li>
+<li>然後，將剛剛從<code>lookup.pb.go</code>複製的function附屬於剛剛宣告的structure，來讓我們來implement他<ul>
+<li>一開始貼上會出現錯誤，這是因為function中的名稱是附屬於<code>lookup.pb.go</code>下，故記得補上<code>pb.</code>即可。</li>
+</ul>
+</li>
+<li>implement的邏輯即是for loop查詢<code>recordTable</code> 這個slice，然後比對如果有與傳進來的<code>req.LookingUp.FirstName</code>相同，則return查到的ID，否則回傳error message說明找不到。<ul>
+<li>傳進來的參數可以透過<code>*pb.LookUpRequest</code>來查詢</li>
+<li>回傳的<code>*pb.LookUpResponse</code>是一個structure，所以我們需要將結果組裝起來成相同類型：記得回傳的需要是一個位址類型。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> serviceSvr <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *serviceSvr)</span> <span class="title">LookUp</span><span class="params">(ctx context.Context, req *pb.LookUpRequest)</span> <span class="params">(response *pb.LookUpResponse, err error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> (</span><br><span class="line">        firstName  <span class="keyword">string</span></span><br><span class="line">        lookUpResp *pb.LookUpResponse</span><br><span class="line">        content    MyDataTable</span><br><span class="line">        result     <span class="keyword">int32</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    log.Printf(<span class="string">"LookUp function invoked by %v"</span>, req)</span><br><span class="line">    log.Println(recordTable)</span><br><span class="line"></span><br><span class="line">    firstName = req.LookingUp.FirstName</span><br><span class="line">    result = <span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> _, content = <span class="keyword">range</span> recordTable &#123;</span><br><span class="line">        log.Println(content.Name, <span class="string">"/"</span>, firstName)</span><br><span class="line">        <span class="keyword">if</span> content.Name == firstName &#123;</span><br><span class="line">            result = content.ID</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> result == <span class="number">-1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, errors.New(<span class="string">"failed to find ID, please check first name again"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    lookUpResp = &amp;pb.LookUpResponse&#123;</span><br><span class="line">        Result: result,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> lookUpResp, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>定義完service中function的邏輯後，我們來初始化一個gRPC的Server</li>
+</ol>
+<ul>
+<li>先建立一個listener，並且用tcp監聽著port: 50051<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> listener, err = net.Listen(<span class="string">"tcp"</span>, <span class="string">":50051"</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatalf(<span class="string">"failed to create a listener: %v"</span>, err)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li>
+<li>首先引入gRPC package: <code>google.golang.org/grpc</code>，接著呼叫<code>NewServer</code>就能成功初始一個gRPC Server</li>
+<li>接著，引入<code>/pb</code>資料夾後，就可以參考到剛剛透過protoc產生的<code>RegisterLookUpServiceServer</code> function，在這邊把我們剛剛初始成功的gRPC:<code>grpcSvr</code>與上一個步驟產生的serviceSvr這個綁有<code>LookUp</code> function的structure: <code>&amp;serviceSvr{}</code>綁上去。</li>
+<li>最後，我們將gRPC server開始launch起來，就開始正式服務了。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">grpcSvr = grpc.NewServer()</span><br><span class="line">pb.RegisterLookUpServiceServer(grpcSvr, &amp;serviceSvr&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err = grpcSvr.Serve(listener); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatalf(<span class="string">"failed to serve gRPC: %v"</span>, err)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><em>Step 4. 開發Client端程式</em><br><em>Step 5. 測試連接</em></p>
 
       
     </div>
@@ -529,8 +561,6 @@
           
             <a href="/tags/Golang/" rel="tag"># Golang</a>
           
-            <a href="/tags/20分鐘小教室/" rel="tag"># 20分鐘小教室</a>
-          
             <a href="/tags/TIL/" rel="tag"># TIL</a>
           
             <a href="/tags/gRPC/" rel="tag"># gRPC</a>
@@ -546,8 +576,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/02/03/gRPC-1-Intro/" rel="next" title="20分鐘小教室：gRPC 1. 初介紹">
-                <i class="fa fa-chevron-left"></i> 20分鐘小教室：gRPC 1. 初介紹
+              <a href="/2019/02/03/gRPC-1-Intro/" rel="next" title="TIL：gRPC 1. 初介紹">
+                <i class="fa fa-chevron-left"></i> TIL：gRPC 1. 初介紹
               </a>
             
           </div>
