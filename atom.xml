@@ -202,9 +202,9 @@
       <category term="Hexo" scheme="http://yoursite.com/categories/Hexo/"/>
     
     
-      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
-    
       <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
     
   </entry>
   
