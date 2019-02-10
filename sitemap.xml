@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://yoursite.com/categories/index.html</loc>
+    
+    <lastmod>2019-02-10T09:28:43.871Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/02/03/gRPC-2-Unary/</loc>
+    
+    <lastmod>2019-02-10T09:14:04.656Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/04/16/Hexo-notes/</loc>
+    
+    <lastmod>2019-02-10T09:13:59.885Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/02/03/gRPC-1-Intro/</loc>
+    
+    <lastmod>2019-02-10T09:13:46.748Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/04/12/GolangNote_Function/</loc>
+    
+    <lastmod>2019-02-10T09:13:41.008Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/12/19/etcd-part1/</loc>
+    
+    <lastmod>2019-02-10T09:13:36.745Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2019/01/14/ApiServerWithHTMLExample/</loc>
+    
+    <lastmod>2019-02-10T09:13:31.508Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/</loc>
+    
+    <lastmod>2019-02-10T09:13:24.912Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/04/18/GolanNote-PkgVar/</loc>
+    
+    <lastmod>2018-04-17T16:05:18.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/28/TestPost/</loc>
+    
+    <lastmod>2018-03-28T14:41:38.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/index.html</loc>
+    
+    <lastmod>2018-03-28T14:40:55.000Z</lastmod>
+    
+  </url>
+  
+</urlset>

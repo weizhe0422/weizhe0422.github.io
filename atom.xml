@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>改變是前進的力量</title>
+  
+  <subtitle>Change is the power of progress</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2019-02-10T09:14:04.656Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>WeiZhe Chang</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>TIL：gRPC-2-Unary</title>
+    <link href="http://yoursite.com/2019/02/03/gRPC-2-Unary/"/>
+    <id>http://yoursite.com/2019/02/03/gRPC-2-Unary/</id>
+    <published>2019-02-03T06:55:06.000Z</published>
+    <updated>2019-02-10T09:14:04.656Z</updated>
+    
+    <content type="html"><![CDATA[<p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="TIL：gRPC 1. 初介紹">TIL：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p><p>關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 </p><p>所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID，下圖為這個範例的資料夾結構。<br><img src="/2019/02/03/gRPC-2-Unary/project_structure.png"></p><p><em>Step 1. 定義.proto文件</em><br>撰寫.proto文件時，可以分為幾個區塊</p><ol><li><p>第一個是文件格式定義，其中</p><ul><li>syntax: proto buffer版本，因為目前最新為第三版，故可以直接給予proto3</li><li>package: 表這份文件所屬的package，這邊我們用與檔名相同</li><li>go_package: 表在用Golang語言開發時引入的package名稱，我們用pb作為名稱來與其他package區分。<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> lookup;</span><br><span class="line"></span><br><span class="line"><span class="keyword">option</span> go_package = <span class="string">"pb"</span>;</span><br></pre></td></tr></table></figure></li></ul></li><li><p>接下來，就開始撰寫邏輯的部分，我們可以分為兩個大部分</p><ul><li>message: 定義溝通的參數介面，這邊要注意到<ul><li>變數間必須給予順序編號</li><li>變數的類型包含double, float, int32, int64, bool, string, bytes等，與各語言對應的關係可以參考：<a href="https://developers.google.com/protocol-buffers/docs/proto3#scalar" target="_blank" rel="noopener">https://developers.google.com/protocol-buffers/docs/proto3#scalar</a></li></ul></li><li>service: 定義溝通的function介面，這邊這邊要注意到<ul><li>可以透過service名稱來區隔不同的service type，例如：OrderService、CheckOutService與Shipservice就可以分開來定義</li><li>每一個service內的function name需以rpc開頭，並且將input與output介面定義上去，之後會用到串流方式傳輸資料，就可以在參數前加上stream關鍵字</li></ul></li></ul><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">message LookingUp &#123;</span><br><span class="line">    string first_name = 1;</span><br><span class="line">    string last_name = 2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpRequest &#123;</span><br><span class="line">    LookingUp lookingUp = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpResponse &#123;</span><br><span class="line">    int32 result = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service LookUpService&#123;</span><br><span class="line">    //unary</span><br><span class="line">    rpc LookUp(LookUpRequest) returns (LookUpResponse) &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol><p><em>Step 2. 將.proto文件做Compile</em></p><ol><li><p>安裝protobuf的工具，並且記得將該路徑加入到$GOPATH/bin</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/golang/protobuf/protoc-gen-go</span><br></pre></td></tr></table></figure></li><li><p>然後切換到專案的資料夾下後，輸入下面的command，如果沒有發生錯誤，就可以在<code>/pb</code>中發現多了一個檔案，其副檔名<code>.pb.go</code>。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc Lookupservice/Unary/pb/lookup.proto --go_out=plugins=grpc:.</span><br></pre></td></tr></table></figure></li></ol><p><em>Step 3. 開發Server端程式</em></p><ol><li><p>首先，先建立一個模擬的data table，讓client呼叫時可以達到查詢的效果</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyDataTable <span class="keyword">struct</span> &#123;</span><br><span class="line">    ID   <span class="keyword">int32</span></span><br><span class="line">    Name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    recordTable []MyDataTable</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InitData</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">    recordTable = <span class="built_in">make</span>([]MyDataTable, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    recordTable = <span class="built_in">append</span>(recordTable, MyDataTable&#123;</span><br><span class="line">        ID:   <span class="number">13579</span>,</span><br><span class="line">        Name: <span class="string">"WeiZhe"</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    recordTable = <span class="built_in">append</span>(recordTable, MyDataTable&#123;</span><br><span class="line">        ID:   <span class="number">24680</span>,</span><br><span class="line">        Name: <span class="string">"Ray"</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li><li><p>我們先來定義一個structure，他會包含與Client溝通的function</p></li></ol><ul><li><p>我們先到剛剛產生的<code>lookup.pb.go</code>檔案找尋到下面這段，這代表LookUpServiceServer這個interface中有一個function等待我們去implement，我們把<code>LookUp(context.Context, *LookUpRequest) (*LookUpResponse, error)</code>複製起來</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> LookUpServiceServer <span class="keyword">interface</span> &#123;</span><br><span class="line"><span class="comment">//unary</span></span><br><span class="line">LookUp(context.Context, *LookUpRequest) (*LookUpResponse, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>回到server.go，先宣告一個structure</p></li><li>然後，將剛剛從<code>lookup.pb.go</code>複製的function附屬於剛剛宣告的structure，來讓我們來implement他<ul><li>一開始貼上會出現錯誤，這是因為function中的名稱是附屬於<code>lookup.pb.go</code>下，故記得補上<code>pb.</code>即可。</li></ul></li><li>implement的邏輯即是for loop查詢<code>recordTable</code> 這個slice，然後比對如果有與傳進來的<code>req.LookingUp.FirstName</code>相同，則return查到的ID，否則回傳error message說明找不到。<ul><li>傳進來的參數可以透過<code>*pb.LookUpRequest</code>來查詢</li><li>回傳的<code>*pb.LookUpResponse</code>是一個structure，所以我們需要將結果組裝起來成相同類型：記得回傳的需要是一個位址類型。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> serviceSvr <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *serviceSvr)</span> <span class="title">LookUp</span><span class="params">(ctx context.Context, req *pb.LookUpRequest)</span> <span class="params">(response *pb.LookUpResponse, err error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> (</span><br><span class="line">        firstName  <span class="keyword">string</span></span><br><span class="line">        lookUpResp *pb.LookUpResponse</span><br><span class="line">        content    MyDataTable</span><br><span class="line">        result     <span class="keyword">int32</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    log.Printf(<span class="string">"LookUp function invoked by %v"</span>, req)</span><br><span class="line">    log.Println(recordTable)</span><br><span class="line"></span><br><span class="line">    firstName = req.LookingUp.FirstName</span><br><span class="line">    result = <span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> _, content = <span class="keyword">range</span> recordTable &#123;</span><br><span class="line">        log.Println(content.Name, <span class="string">"/"</span>, firstName)</span><br><span class="line">        <span class="keyword">if</span> content.Name == firstName &#123;</span><br><span class="line">            result = content.ID</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> result == <span class="number">-1</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>, errors.New(<span class="string">"failed to find ID, please check first name again"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    lookUpResp = &amp;pb.LookUpResponse&#123;</span><br><span class="line">        Result: result,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> lookUpResp, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li></ul></li></ul><ol start="3"><li>定義完service中function的邏輯後，我們來初始化一個gRPC的Server</li></ol><ul><li>先建立一個listener，並且用tcp監聽著port: 50051<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> listener, err = net.Listen(<span class="string">"tcp"</span>, <span class="string">":50051"</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatalf(<span class="string">"failed to create a listener: %v"</span>, err)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li><li>首先引入gRPC package: <code>google.golang.org/grpc</code>，接著呼叫<code>NewServer</code>就能成功初始一個gRPC Server</li><li>接著，引入<code>/pb</code>資料夾後，就可以參考到剛剛透過protoc產生的<code>RegisterLookUpServiceServer</code> function，在這邊把我們剛剛初始成功的gRPC:<code>grpcSvr</code>與上一個步驟產生的serviceSvr這個綁有<code>LookUp</code> function的structure: <code>&amp;serviceSvr{}</code>綁上去。</li><li>最後，我們將gRPC server開始launch起來，就開始正式服務了。<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">grpcSvr = grpc.NewServer()</span><br><span class="line">pb.RegisterLookUpServiceServer(grpcSvr, &amp;serviceSvr&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err = grpcSvr.Serve(listener); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Fatalf(<span class="string">"failed to serve gRPC: %v"</span>, err)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li></ul><p><em>Step 4. 開發Client端程式</em><br> 接著，我們可以開始來開發client的程式，相較於server端，client端的開發較為簡單</p><ol><li>首先，一樣引入<code>google.golang.org/grpc</code>，然後使用<code>Dial</code> function來與server進行溝通</li></ol><ul><li>第一個參數填入server端的位址</li><li>第二個參數填入<code>Dial</code> function的選項，通常都是<code>grpc.With</code>開頭，這邊因為我們只是基本功能實現，所以就不用到SSL驗證，故填入<code>grpc.WithInsecure()</code>：當然如果你有多個功i能要打開，你可以看到後面是一個interface，只要把要選項附加上去即可。</li><li>記得養成好習慣，一但打開connection，就要加上defer來將這個connection做close。</li></ul><ol start="2"><li><p>然後，引入<code>github.com/weizhe0422/gRPC/LookupService/Unary/pb</code>，就可以參考到<code>NewLookUpServiceClient</code> function，並且把我們剛剛初始的connection傳進去，並得到一個gRPC Client的變數。</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> conn, err = grpc.Dial(<span class="string">":50051"</span>, grpc.WithInsecure()); err != <span class="literal">nil</span> &#123;</span><br><span class="line">log.Fatalf(<span class="string">"failed to coneect to gRPC server: %v"</span>, err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">defer</span> conn.Close()</span><br><span class="line">client = pb.NewLookUpServiceClient(conn)</span><br></pre></td></tr></table></figure></li><li><p>client端的最後一步就是開始呼叫server端的function並得到回應</p></li></ol><ul><li>我們先把剛剛gRPC Client的變數傳到一個function來實作</li><li>其中function實作中<ul><li>把request的資料組成<code>pb.LookUpRequest</code>類型</li><li>使用Client變數中protoBuf定義的function name，並傳入context與剛剛組成的<code>pb.LookUpRequest</code>類型資料</li><li>接著就可以拿到該function回傳的response結果<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">doUnary(client, firstName, lastName)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doUnary</span><span class="params">(client pb.LookUpServiceClient, firstName, lastName <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span>(</span><br><span class="line">        lookUpReq *pb.LookUpRequest</span><br><span class="line">        lookUpResp *pb.LookUpResponse</span><br><span class="line">        err error</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    lookUpReq = &amp;pb.LookUpRequest&#123;</span><br><span class="line">        LookingUp: &amp;pb.LookingUp&#123;</span><br><span class="line">            FirstName:firstName,</span><br><span class="line">            LastName:lastName,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> lookUpResp, err = client.LookUp(context.Background(),lookUpReq); err!=<span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatalf(<span class="string">"failed to send LookUp: %v"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Println(<span class="string">"LookUp result: "</span>, lookUpResp.Result)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure></li></ul></li></ul><p><em>Step 5. 測試連接</em></p><ul><li>切換到server端與client端的資料夾，並且各自將其run起來，就可以看到Client端成功從server查詢到first_name於data table中的編號。<img src="/2019/02/03/gRPC-2-Unary/gRPC_Unary_server.png"><img src="/2019/02/03/gRPC-2-Unary/gRPC_Unary_Client.png"></li></ul><p>至此已經完成第一個gRPC類型的開發，後面三個類型都是這個類型的些微變化就可以實現成功，所以如果能把這些步驟做到熟悉，後面的範例就能夠更快上手囉！ 我們下個章節見啦！</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;繼上一篇的&lt;a href=&quot;/2019/02/03/gRPC-1-Intro/&quot; title=&quot;TIL：gRPC 1. 初介紹&quot;&gt;TIL：gRPC 1. 初介紹&lt;/a&gt;，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方
+      
+    
+    </summary>
+    
+      <category term="gRPC" scheme="http://yoursite.com/categories/gRPC/"/>
+    
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
+    
+      <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
+    
+      <category term="gRPC" scheme="http://yoursite.com/tags/gRPC/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TIL：gRPC 1. 初介紹</title>
+    <link href="http://yoursite.com/2019/02/03/gRPC-1-Intro/"/>
+    <id>http://yoursite.com/2019/02/03/gRPC-1-Intro/</id>
+    <published>2019-02-03T04:50:02.000Z</published>
+    <updated>2019-02-10T09:13:46.748Z</updated>
+    
+    <content type="html"><![CDATA[<p>[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp; Microservices<br><a href="https://www.udemy.com/grpc-golang/" target="_blank" rel="noopener">https://www.udemy.com/grpc-golang/</a></p><p>因為最近在研究一個DB Middleware的計畫，原本打算利用gin-gonic這套Http Framework架構，使用Post接收SQL Command，然後把撈取結果回傳給User，不過最近發現gRPC覺得十分有趣，所以去Udemy找了課程，發現這個課程前顯易懂，所以打算好好來研究一下，看能否把gRPC的好處結合進來。</p><p>過往RESTful的Web Service，Client端與Server端的兩個開發者必須Align清楚每一個Service的Input參數名稱，甚至是資料型態都必須確認，當然現在有很多工具可以解決這樣的問題，例如：Swagger，但是實做起來卻沒有那麼簡單，而且當傳輸的資料量很大的時候，又會害怕掉資料的問題。</p><p>gRPC即是因應解決這些問題而生，他於2015年由Google所支援免費且open-sorce的框架，他是基於Protocol Buffers所開發出來的RPC框架，其擁有的優點恰巧能解決上面提到的問題，例如：支援Streaming傳輸，跨語言的溝通文件：其中，目前他是屬於Docker和Kubernetes的子計畫，因為他架構在HTTP/2之上，故傳輸更快且更低延遲，並且如果你想要有log或是驗證功能，也都有現成的套件可以使用。<br><img src="/2019/02/03/gRPC-1-Intro/gRPC_Platform.png"></p><p>剛剛提到的跨語言溝通文件，即是指Protocol Buffers，這是由Google定義的數據描述語言(其他如XML與JSON)，在文件中同時也會定義Request與Response參數的參數內容與Data type，並且目前有多個程式語言有第三方套件可以支援(如: Golang, C, Python等)，而且使用起來也很簡單，只要你安裝好gRPC tool後，就能根據撰寫好的文件產生合約文件供Server端與各Client端使用。<br><img src="/2019/02/03/gRPC-1-Intro/gRPC_Develop_Workflow.png"></p><p>於gRPC架構中的Server與Client溝通方式分為四種，分別為Unary、Server Streaming、Client Streaming與Bidirectional Streaming，其中Unary就是傳統的溝通方式Server會等待Client送完Request Data，然後再一包把處理結果回傳，但有了Streaming的支持，就可以根據不同的目標需求，將Server與Client的data透過Streaming方式將資料送出，如前面提到的DB Middileware計畫，即是想應用Server Straming方式，把從Oracle撈回來的資料分批的傳回給Client端。<br><img src="/2019/02/03/gRPC-1-Intro/gRPC_Types.png"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[參考] Udemy: gRPC [Golang] Master Class: Build Modern API &amp;amp; Microservices&lt;br&gt;&lt;a href=&quot;https://www.udemy.com/grpc-golang/&quot; target=&quot;_bla
+      
+    
+    </summary>
+    
+      <category term="gRPC" scheme="http://yoursite.com/categories/gRPC/"/>
+    
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
+    
+      <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
+    
+      <category term="gRPC" scheme="http://yoursite.com/tags/gRPC/"/>
+    
+      <category term="20分鐘小教室：" scheme="http://yoursite.com/tags/20%E5%88%86%E9%90%98%E5%B0%8F%E6%95%99%E5%AE%A4%EF%BC%9A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>20分鐘小教室：用Golang建立一個Api Service，並與靜態網頁互動</title>
+    <link href="http://yoursite.com/2019/01/14/ApiServerWithHTMLExample/"/>
+    <id>http://yoursite.com/2019/01/14/ApiServerWithHTMLExample/</id>
+    <published>2019-01-14T15:26:06.000Z</published>
+    <updated>2019-02-10T09:13:31.508Z</updated>
+    
+    <content type="html"><![CDATA[<p>GitHub位置：<a href="https://github.com/weizhe0422/ApiServerWithHTML.git" target="_blank" rel="noopener">https://github.com/weizhe0422/ApiServerWithHTML.git</a></p><p>網路上其實很多教學文是告訴你怎麼用Golang建立一個API Service，其提供GET或POST讓人呼叫，不過我自己是比較少看到結合靜態網頁來跟使用者互動，所以才會想把學習的東西記錄下來，也分享給大家。</p><p>最終結果會像下圖，使用者輸入兩組Key與Value，最後透過GET方式向Api Service取得剛剛輸入的資訊。<br><img src="/2019/01/14/ApiServerWithHTMLExample/FinalResult.png" alt="FinalResult"></p><p>整個資料夾結構會把API Service與靜態網頁分開來放<br><img src="/2019/01/14/ApiServerWithHTMLExample/FolderStructure.png" alt="FolderStructure"></p><p>我們開始來建立一個Http Server來開啟服務吧！ 首先，我們先initial一個Mux，並且加上預計提供服務的路由網址，以及對應的Function。<br><img src="/2019/01/14/ApiServerWithHTMLExample/httpMux.png" alt="httpMux"></p><p>因為是要做示範，所以我們這邊的Handle Function內容主要是接收GET的Request，並且檢查傳進來參數對，然後再把它回覆回去。 在這個Function中需要注意到，當我們用req.URL.Query()來取得傳入的參數時，需要注意到回傳的型態為“map[string][]string”，也就是說如果傳入多個相同Key值時，他會存在同一個Key值下。 因為目標想把Input的鍵值對回傳回去，所以我們透過foreach將其串成一個字串，最後將其寫入http.ResponseWriter。<br><img src="/2019/01/14/ApiServerWithHTMLExample/handleDisplay.png" alt="handleDisplay"></p><p>接著，開始初始化一個Http Server，並且給予一些初始值，例如讀與寫的Time Out時間，以及將會Handle哪一個Mux。<br><img src="/2019/01/14/ApiServerWithHTMLExample/HttpServer.png" alt="HttpServer"></p><p>當然Listener不可缺少，給予要使用Protocol以及將會聽哪一個Port，並且別忘記Handle一下初始化Listner可能會發生錯誤。 別忘了搭配Go Routine來監聽Request。<br><img src="/2019/01/14/ApiServerWithHTMLExample/ListenAndServe.png" alt="ListenAndServe"></p><p>截至目前為止，我們已經建立一個可以成功運行的API Service，接下來就是要寫一個靜態網頁來串接這個Service。</p><p>因為想要讓畫面看起來有些互動，並且看起來有美化效果，所以我們用了bootstrap，詳細內容可以參考六角學院(<a href="https://bootstrap.hexschool.com/docs/4.1/getting-started/introduction/)做的翻譯，裡面寫得非常詳細，很值得參考。" target="_blank" rel="noopener">https://bootstrap.hexschool.com/docs/4.1/getting-started/introduction/)做的翻譯，裡面寫得非常詳細，很值得參考。</a></p><p>首先，引入JQuery、CSS與Boostrap，其連結可以參考：<a href="https://www.bootcdn.cn/。" target="_blank" rel="noopener">https://www.bootcdn.cn/。</a><br><img src="/2019/01/14/ApiServerWithHTMLExample/JQeryCSSBoostrap.png" alt="JQeryCSSBoostrap"></p><p>接著，可以透過boostrap中的”互動視窗 (Modal)”來點擊一個按鈕後跳出一個輸入的對話視窗，並且搭配input-group來讓使用者知道要分別輸入兩組鍵值對。<br><a href="https://bootstrap.hexschool.com/docs/4.0/components/modal/" target="_blank" rel="noopener">https://bootstrap.hexschool.com/docs/4.0/components/modal/</a><br><a href="https://bootstrap.hexschool.com/docs/4.0/components/input-group/" target="_blank" rel="noopener">https://bootstrap.hexschool.com/docs/4.0/components/input-group/</a><br><img src="/2019/01/14/ApiServerWithHTMLExample/ModalAndInputGroup.png" alt="ModalAndInputGroup"></p><p>最後一個階段，就是把這個網頁與我們的API Serice結合起來。</p><p>再次打開API Service，我們要來在Http Server同步把剛剛寫的靜態網頁也加載進來；一開始先指定靜態網頁儲存的資料夾，因為我們放在同一專案的webPage資料夾下，故將其寫在http.Dir；接著，透過http.FileServer將其資料夾下的靜態網頁變成Handler，最後再透過mux.Handle來載入。 這邊得要注意到，因為我們是在網址後的”/“來加載這個index.html，故需要先把原先Handler的”/“先移除(http.StripPrefix)，然後再傳入，才不會發生找不到網頁的狀況。<br><img src="/2019/01/14/ApiServerWithHTMLExample/HttpServerHTML.png" alt="HttpServerHTML"></p><p>最後的最後，我們要來在index.html編寫Ajax來呼叫API Service。先找到剛剛“送出”按鈕的id，然後在”click“事件下啟動對應的function，其function我們設定欲呼叫的Router位置、呼叫的Method、傳入的data型態以及成功(success)後要做什麼事情。 AjaxCallService透過alert的方式讓它顯示出來。<br>![AjaxCallService]</p><p>這邊要注意到，因為我們是以JQuey利用ajax非同步呼叫API Service，但這邊我碰到一個問題，即便有呼叫成功，且使用console也拿到Status Code=200，但是還是沒辦法拿到ResponseText，其原因ajax為非同步運作，故當網頁發完請求後，script就往下執行了，並不會等待回傳，但ResponsText會在瀏覽器即時的解析，這樣根本來不及解析完就結束了。 所以，我們這邊把async設定為flase，讓他必須等待ResponseText被解析完後才往下走。 如此就能讓結果呈現出來。<br>參考：：<a href="http://radio-idea.blogspot.com/2012/02/note-for-jquery-ajaxresponsetext.html" target="_blank" rel="noopener">http://radio-idea.blogspot.com/2012/02/note-for-jquery-ajaxresponsetext.html</a></p><p>第一次寫教學文，希望大家見諒很多贅詞，也希望能夠稍微幫助到大家！  我們下次見。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;GitHub位置：&lt;a href=&quot;https://github.com/weizhe0422/ApiServerWithHTML.git&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/weizhe0422/ApiSe
+      
+    
+    </summary>
+    
+      <category term="Go" scheme="http://yoursite.com/categories/Go/"/>
+    
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
+    
+      <category term="20分鐘小教室" scheme="http://yoursite.com/tags/20%E5%88%86%E9%90%98%E5%B0%8F%E6%95%99%E5%AE%A4/"/>
+    
+      <category term="Ajax" scheme="http://yoursite.com/tags/Ajax/"/>
+    
+      <category term="HTML" scheme="http://yoursite.com/tags/HTML/"/>
+    
+      <category term="API Service" scheme="http://yoursite.com/tags/API-Service/"/>
+    
+      <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LINE Tech Pulse 2018 參加心得</title>
+    <link href="http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/"/>
+    <id>http://yoursite.com/2018/12/23/LINE-Tech-Pulse-2018/</id>
+    <published>2018-12-23T12:13:26.000Z</published>
+    <updated>2019-02-10T09:13:24.912Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="/2018/12/23/LINE-Tech-Pulse-2018/48407954_1944142775683584_562751294004002816_n.jpg" alt="48407954_1944142775683584_562751294004002816_n"></p><p>這週參加了LINE在台灣辦的Tech Pulse 2018的活動，雖然過去自己在Line平台的開發經驗寥寥可數，不過經過這次後，明年的自己給自己訂定的52 projects計畫應該會很多跟Line相關。</p><p>其實從一開始的活動報名就讓我感覺到跟參加其他活動不一樣，活動的報名是透過活動的官方Line帳號的對話視窗，用漸進式的表格填寫完成這次報名，這樣方式讓報名者填寫起來比較舒服，降低需要填寫的不耐煩感；<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48991654_1912887425476598_147234588463202304_n.jpg" alt="48991654_1912887425476598_147234588463202304_n"></p><p>到了會場之後，參加者也只需要打開手機的藍牙就可以透過Line Beacon的連結完成報到的手續，即便進入會場需要排隊，但是其實等待不到15分鐘就可以順利進到會場。 而且在會場中，有三個互動的遊戲，透過遊戲的方式展示Line在IoT方面應用，其中一個項目是使用者透過Line去與裝置註冊來加入Group，並且在遊戲結束後在Group內看自己的分數排名。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48414182_365065710967940_1656126779313618944_n.jpg" alt="48414182_365065710967940_1656126779313618944_n"></p><p>一開始是由技術總監上台談到過去一年Line在AI, Link與LIFF(Line Front-end Framwork)上發揮很大的心力，讓Line不只是只有訊息或影片的傳遞，更可以做到更全面融入使用者生活，且讓開發者可以更輕易加入開發的可能性。</p><p>其中提到提到為了提高更多人加入Line的開發圈，他們致力於讓PaaS更加的完善，並且也努力讓Framework的內容更豐富；其中為了要達到Reuse-Oriented Software Engineering，所以Line也持續在將原有的東西變成Microservice來達到Reuse的效果，進而讓更多人加入來豐沛整個開發能量。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48394237_352020325585703_6935609787690254336_n.jpg" alt="48394237_352020325585703_6935609787690254336_n"></p><p>中間提到了近幾年很夯的Chatbot，我想這個是Line的強項，不過為了讓商家與使用者間有更好的互動，所以Line在Message API的LIFF提供更多的互動介面讓使用者有好的操作模式，其實講者提到LIFF的目的就是為了讓使用者不需要再去打開另一個瀏覽器來查看資訊，而是直接在對話視窗中來瀏覽網頁，並且可以針對問卷式的互動時，可以讓開發者針對問題的多寡決定呈現的方式，提高回答問題的流暢性。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48415751_366381887461292_8556255511459135488_n.jpg" alt="48415751_366381887461292_8556255511459135488_n"><br>另外在互動介面上的新玩意即是透過Flex Message讓商家可以將資訊用Grid甚至是影片的方式去呈現商品的資訊，並且加上Rich Menu的方式提供給User比較清楚的選擇清單，而且這些特色的開發在於其資訊的格式並沒有太大的限定，可以讓商家自由呈現想要給使用者看的樣子。 並且開發者也可以透過Flex Simulator來看Message的呈現方式方便來做調整。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/49008949_2238397723110196_933723901580541952_n.jpg" alt="49008949_2238397723110196_933723901580541952_n"><br><img src="/2018/12/23/LINE-Tech-Pulse-2018/49183630_1957733824263622_1665617802339287040_n.jpg" alt="49183630_1957733824263622_1665617802339287040_n"><br><img src="/2018/12/23/LINE-Tech-Pulse-2018/2018-12-239.41.18.png" alt="2018-12-239.41.18"></p><p> 另一個吸引我注意的就是在IoT的部分，其中講者提到其可以分為兩個部分，其中一個是offline device的連線是透過藍芽的連結，而另一個online device則是透過internet的方式來傳輸，這裡透過體重計來當作生活中範例，使用者先將體重計與Line App做連結，然後就可以將每次量完體重的紀錄傳輸到Line的對話群組中，如果Device換成是血壓計或是其他設備，就能在老人居家照顧上起到較明顯的變化；另一個例子，就是連結家中的電器，例如冷氣，這樣使用者就可以將手機來遠端開啟冷氣，達到智慧家庭得目標。 另外，現在Line也在台北捷運建置Beacon，當旅客近到捷運站後就能主動接收到相關的訊息，例如新聞、天氣等資訊<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48408629_309600776324090_2528886051078930432_n.jpg" alt="48408629_309600776324090_2528886051078930432_n"></p><p>還有一個不錯的題目就是講到測試的部分，以Line這樣的公司，每天的Change的頻繁度一定十分的高，如何確保每次上線後的品質，就是得透過軟體測試來達成，講者提到每一個Task的測試，都必須仰賴開發者與測試人員的合作與溝通，必須在一開始就確定好此次Change的變動範圍以及允收的Criteria，才有辦法開發者知道必須要達到什麼開發目標，並且測試人員才能針對完整功能建立好的Test Plan。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48398657_578348165950453_1527062552507318272_n.jpg" alt="48398657_578348165950453_1527062552507318272_n"><br><img src="/2018/12/23/LINE-Tech-Pulse-2018/49128211_369158393847962_2314893909760671744_n.jpg" alt="49128211_369158393847962_2314893909760671744_n"></p><p>另外，講者也提到好的測試必須在開發者每開發完一個function後就進行Unite Test，如果等到全部完成才來做測試，通常都會有遺漏的部分，如果能在每一個function完成後就確保Unite Test的正確性，最後再進行Regression Test，這樣的軟體生命週期才會是比較有效率且完整的。<br><img src="/2018/12/23/LINE-Tech-Pulse-2018/48968164_755579944818005_5977386284551766016_n.jpg" alt="48968164_755579944818005_5977386284551766016_n"></p><p>最後，能夠參加這個會議真的獲益良多，今年的牌子前面的Guest，希望明年能夠有機會前面能夠不再寫G~  哈！</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;img src=&quot;/2018/12/23/LINE-Tech-Pulse-2018/48407954_1944142775683584_562751294004002816_n.jpg&quot; alt=&quot;48407954_1944142775683584_56275129400
+      
+    
+    </summary>
+    
+      <category term="conference" scheme="http://yoursite.com/categories/conference/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>etcd Part 1</title>
+    <link href="http://yoursite.com/2018/12/19/etcd-part1/"/>
+    <id>http://yoursite.com/2018/12/19/etcd-part1/</id>
+    <published>2018-12-18T16:48:46.000Z</published>
+    <updated>2019-02-10T09:13:36.745Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="etcd" scheme="http://yoursite.com/categories/etcd/"/>
+    
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
+      <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
+    
+      <category term="etcd" scheme="http://yoursite.com/tags/etcd/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GolanNote_PkgVar</title>
+    <link href="http://yoursite.com/2018/04/18/GolanNote-PkgVar/"/>
+    <id>http://yoursite.com/2018/04/18/GolanNote-PkgVar/</id>
+    <published>2018-04-17T16:04:33.000Z</published>
+    <updated>2018-04-17T16:05:18.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 使用小記</title>
+    <link href="http://yoursite.com/2018/04/16/Hexo-notes/"/>
+    <id>http://yoursite.com/2018/04/16/Hexo-notes/</id>
+    <published>2018-04-15T16:49:35.000Z</published>
+    <updated>2019-02-10T09:13:59.885Z</updated>
+    
+    <content type="html"><![CDATA[<p>基本操作:</p><ul><li>發表新文章： Hexo new “檔案名“</li><li>Deploy: <ul><li>Hexo clean</li><li>Hexo deploly -g</li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;基本操作:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;發表新文章： Hexo new “檔案名“&lt;/li&gt;
+&lt;li&gt;Deploy: &lt;ul&gt;
+&lt;li&gt;Hexo clean&lt;/li&gt;
+&lt;li&gt;Hexo deploly -g&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+      
+    
+    </summary>
+    
+      <category term="Hexo" scheme="http://yoursite.com/categories/Hexo/"/>
+    
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
+      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Golang筆記」Function</title>
+    <link href="http://yoursite.com/2018/04/12/GolangNote_Function/"/>
+    <id>http://yoursite.com/2018/04/12/GolangNote_Function/</id>
+    <published>2018-04-12T15:36:54.000Z</published>
+    <updated>2019-02-10T09:13:41.008Z</updated>
+    
+    <content type="html"><![CDATA[<p>[參考]Appleboy於Udemy課程：Go 語言基礎實戰<br><a href="https://www.udemy.com/golang-fight/learn/v4/overview" target="_blank" rel="noopener">https://www.udemy.com/golang-fight/learn/v4/overview</a></p><p>Function主要是用來將整體的程式碼做功能性的區分，降低整體程式碼的重複性，也提升程式碼的可讀性。</p><p>Golang的Function相較於其他的程式語言，我覺得最大的特點就是支持Multiple Return；例如當你建立一個公用Function供其他開發者使用時，你可以同時回傳兩個變數：一個是回傳值，另一個則是是否正常處理的布林值，如此當外部使用該Function的時候，就可以根據該布林值決定是否取該回傳值往下做處理。</p><p>Golang的Function可分為以下幾種：</p><ol><li>單一回傳值<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(i, j <span class="keyword">float32</span>)</span> <span class="title">float32</span></span> &#123;</span><br><span class="line"><span class="keyword">return</span> i + j</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">fmt.Println(add(<span class="number">4.12</span>, <span class="number">5.67</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>輸出結果<br>9.79</li><li><p>多重回傳值</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">div</span><span class="params">(divisor, dividend <span class="keyword">float32</span>)</span> <span class="params">(<span class="keyword">float32</span>, <span class="keyword">bool</span>)</span></span> &#123;</span><br><span class="line"><span class="keyword">if</span> dividend == <span class="number">0</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>, <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> divisor / dividend, <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> divResult, returnCode := div(<span class="number">4.12</span>, <span class="number">5.67</span>); returnCode &#123;</span><br><span class="line">fmt.Printf(<span class="string">"The result of devision is %f"</span>, divResult)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">fmt.Printf(<span class="string">"Failed to get division result"</span>)</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>輸出結果<br>The result of devision is 0.726631</p></li><li><p>回傳Function</p><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"><span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">doAction</span><span class="params">(a, b <span class="keyword">float32</span>, method <span class="keyword">string</span>)</span> <span class="title">func</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line"><span class="keyword">if</span> method == <span class="string">"add"</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line"><span class="keyword">return</span> fmt.Sprintf(<span class="string">"The add result is %f"</span>, a+b)</span><br><span class="line">&#125;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> method == <span class="string">"sub"</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line"><span class="keyword">return</span> fmt.Sprintf(<span class="string">"The add result is %f"</span>, a-b)</span><br><span class="line">&#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line"><span class="keyword">return</span> fmt.Sprintln(<span class="string">"The method parameter is invalid"</span>)</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">addMethod := doAction(<span class="number">1.11</span>, <span class="number">2.22</span>, <span class="string">"add"</span>)</span><br><span class="line">subMethod := doAction(<span class="number">9.87</span>, <span class="number">6.54</span>, <span class="string">"sub"</span>)</span><br><span class="line">devMethod := doAction(<span class="number">5.67</span>, <span class="number">7.43</span>, <span class="string">"dev"</span>)</span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">"Type of addMethod is %T \n"</span>, addMethod)</span><br><span class="line">fmt.Println(addMethod())</span><br><span class="line">fmt.Printf(<span class="string">"Type of subMethod is %T \n"</span>, subMethod)</span><br><span class="line">fmt.Println(subMethod())</span><br><span class="line">fmt.Printf(<span class="string">"Type of devMethod is %T \n"</span>, devMethod)</span><br><span class="line">fmt.Println(devMethod())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>輸出結果<br>Type of addMethod is func() string<br>The add result is 3.330000<br>Type of subMethod is func() string<br>The add result is 3.330000<br>Type of devMethod is func() string<br>The method parameter is invalid</p></li><li><p>Anonymous Function</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[參考]Appleboy於Udemy課程：Go 語言基礎實戰&lt;br&gt;&lt;a href=&quot;https://www.udemy.com/golang-fight/learn/v4/overview&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https:/
+      
+    
+    </summary>
+    
+      <category term="Go" scheme="http://yoursite.com/categories/Go/"/>
+    
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TestPost</title>
+    <link href="http://yoursite.com/2018/03/28/TestPost/"/>
+    <id>http://yoursite.com/2018/03/28/TestPost/</id>
+    <published>2018-03-28T14:34:37.000Z</published>
+    <updated>2018-03-28T14:41:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>This is post for me!<br><img src="/2018/03/28/TestPost/TEST.png"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;This is post for me!&lt;br&gt;&lt;img src=&quot;/2018/03/28/TestPost/TEST.png&quot;&gt;&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+      <category term="test" scheme="http://yoursite.com/tags/test/"/>
+    
+  </entry>
+  
+</feed>
