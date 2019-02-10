@@ -112,7 +112,8 @@
 <meta property="og:description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRCP_Unary.png">
-<meta property="og:updated_time" content="2019-02-10T06:48:20.924Z">
+<meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/project_structure.png">
+<meta property="og:updated_time" content="2019-02-10T07:09:59.607Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20分鐘小教室：gRPC-2-Unary">
 <meta name="twitter:description" content="繼上一篇的20分鐘小教室：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根">
@@ -430,7 +431,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-10 14:48:20" itemprop="dateModified" datetime="2019-02-10T14:48:20+08:00">2019-02-10</time>
+                <time title="Modified: 2019-02-10 15:09:59" itemprop="dateModified" datetime="2019-02-10T15:09:59+08:00">2019-02-10</time>
               
             
           </span>
@@ -465,8 +466,9 @@
 
       
         <p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="20分鐘小教室：gRPC 1. 初介紹">20分鐘小教室：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p>
-<p>關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID。</p>
-<p> <em>Step 1. 定義.proto文件</em><br>撰寫.proto文件時，可以分為幾個區塊</p>
+<p>關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 </p>
+<p>所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID，下圖為這個範例的資料夾結構。<br><img src="/2019/02/03/gRPC-2-Unary/project_structure.png"></p>
+<p><em>Step 1. 定義.proto文件</em><br>撰寫.proto文件時，可以分為幾個區塊</p>
 <ol>
 <li><p>第一個是文件格式定義，其中</p>
 <ul>
@@ -485,13 +487,15 @@
 </li>
 <li>service: 定義溝通的function介面，這邊這邊要注意到<ul>
 <li>可以透過service名稱來區隔不同的service type，例如：OrderService、CheckOutService與Shipservice就可以分開來定義</li>
-<li>每一個service內的function name需以rpc開頭，並且將input與output介面定義上去，之後會用到串流方式傳輸資料，就可以在參數前加上stream關鍵字<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">message LookingUp &#123;</span><br><span class="line">    string first_name = 1;</span><br><span class="line">    string last_name = 2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpRequest &#123;</span><br><span class="line">    LookingUp lookingUp = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpResponse &#123;</span><br><span class="line">    int32 result = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service LookUpService&#123;</span><br><span class="line">    //unary</span><br><span class="line">    rpc LookUp(LookUpRequest) returns (LookUpResponse) &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<em>Step 2. 將.proto文件做Compile</em><br><em>Step 3. 開發Server端程式</em><br><em>Step 4. 開發Client端程式</em><br><em>Step 5. 測試連接</em></li>
+<li>每一個service內的function name需以rpc開頭，並且將input與output介面定義上去，之後會用到串流方式傳輸資料，就可以在參數前加上stream關鍵字</li>
 </ul>
 </li>
 </ul>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">message LookingUp &#123;</span><br><span class="line">    string first_name = 1;</span><br><span class="line">    string last_name = 2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpRequest &#123;</span><br><span class="line">    LookingUp lookingUp = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message LookUpResponse &#123;</span><br><span class="line">    int32 result = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service LookUpService&#123;</span><br><span class="line">    //unary</span><br><span class="line">    rpc LookUp(LookUpRequest) returns (LookUpResponse) &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<p><em>Step 2. 將.proto文件做Compile</em></p>
+<p><em>Step 3. 開發Server端程式</em><br><em>Step 4. 開發Client端程式</em><br><em>Step 5. 測試連接</em></p>
 
       
     </div>
