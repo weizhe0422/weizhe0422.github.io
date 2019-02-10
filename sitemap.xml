@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/categories/index.html</loc>
+    <loc>http://yoursite.com/2019/02/03/gRPC-2-Unary/</loc>
     
-    <lastmod>2019-02-10T09:28:43.871Z</lastmod>
+    <lastmod>2019-02-10T13:16:09.774Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2019/02/03/gRPC-2-Unary/</loc>
+    <loc>http://yoursite.com/categories/index.html</loc>
     
-    <lastmod>2019-02-10T09:14:04.656Z</lastmod>
+    <lastmod>2019-02-10T09:28:43.871Z</lastmod>
     
   </url>
   
