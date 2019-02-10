@@ -81,7 +81,7 @@
     root: '/',
     scheme: 'Gemini',
     version: '6.7.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -104,7 +104,7 @@
 
 
   <meta name="description" content="基本操作:  發表新文章： Hexo new “檔案名“ Deploy:  Hexo clean Hexo deploly -g">
-<meta name="keywords" content="筆記,Hexo">
+<meta name="keywords" content="Hexo,筆記">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo 使用小記">
 <meta property="og:url" content="http://yoursite.com/2018/04/16/Hexo-notes/index.html">
@@ -458,6 +458,18 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <a href="/2018/04/16/Hexo-notes/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments: </span> <span class="post-comments-count fb-comments-count" data-href="http://yoursite.com/2018/04/16/Hexo-notes/" itemprop="commentCount">0</span>
+                </a>
+              </span>
+            
           
 
           
@@ -514,9 +526,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/筆記/" rel="tag"># 筆記</a>
-          
             <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          
+            <a href="/tags/筆記/" rel="tag"># 筆記</a>
           
         </div>
       
@@ -580,6 +592,8 @@
   </div>
 
   <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
     
     <div class="sidebar-inner">
 
