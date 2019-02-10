@@ -106,22 +106,22 @@
 
 
 
-  <meta name="description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，">
+  <meta name="description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟">
 <meta name="keywords" content="Golang,TIL,gRPC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TIL：gRPC-2-Unary">
 <meta property="og:url" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/index.html">
 <meta property="og:site_name" content="改變是前進的力量">
-<meta property="og:description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，">
+<meta property="og:description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRCP_Unary.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/project_structure.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRPC_Unary_server.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRPC_Unary_Client.png">
-<meta property="og:updated_time" content="2019-02-10T13:25:46.523Z">
+<meta property="og:updated_time" content="2019-02-10T13:44:14.898Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TIL：gRPC-2-Unary">
-<meta name="twitter:description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，">
+<meta name="twitter:description" content="繼上一篇的TIL：gRPC 1. 初介紹，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client： 關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟">
 <meta name="twitter:image" content="http://yoursite.com/2019/02/03/gRPC-2-Unary/gRCP_Unary.png">
 
 
@@ -488,7 +488,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-02-10 21:25:46" itemprop="dateModified" datetime="2019-02-10T21:25:46+08:00">2019-02-10</time>
+                <time title="Modified: 2019-02-10 21:44:14" itemprop="dateModified" datetime="2019-02-10T21:44:14+08:00">2019-02-10</time>
               
             
           </span>
@@ -580,12 +580,7 @@
       
 
       
-        <div style="text-align:center">
-  <div class="github-card" data-user="weizhe0422" data-repo="gRPC_LookUpService" data-width="100%" data-theme="default" data-target="blank" data-client-id="" data-client-secret=""></div>
-</div>
-<script src="/github-card-lib/githubcard.js"></script>
-
-<p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="TIL：gRPC 1. 初介紹">TIL：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p>
+        <p>繼上一篇的<a href="/2019/02/03/gRPC-1-Intro/" title="TIL：gRPC 1. 初介紹">TIL：gRPC 1. 初介紹</a>，我們開始來製作第一個類型的gRPC：Unary，如下圖看到的，他是一個如過去HTTP 1.1模式的溝通方式，Client發送一個請求，然後Server端再把結果回覆給Client：<br><img src="/2019/02/03/gRPC-2-Unary/gRCP_Unary.png"></p>
 <p>關於gRPC的開發，不管是哪一種類型，Server與Client的溝通介面都是從proto buffer文件的定義開始，所以Client只要拿到.proto文件，然後根據自己熟悉的開發語言找到套件進行Compile，就可以開始開發Client端的程式碼了。 </p>
 <p>所以，我們先從定義.proto文件開始，下面示範Client傳遞一個名稱，然後Server端回傳該名字對應的ID，下圖為這個範例的資料夾結構。<br><img src="/2019/02/03/gRPC-2-Unary/project_structure.png"></p>
 <p><em>Step 1. 定義.proto文件</em><br>撰寫.proto文件時，可以分為幾個區塊</p>
