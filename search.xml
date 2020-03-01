@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[「懞懂書生」Knowledge Graph Completion]]></title>
+    <url>%2F2020%2F03%2F01%2Fknowledge-graph-completion%2F</url>
+    <content type="text"><![CDATA[Knowledge Graph(KG)為將知識透過Entities與Relatione用圖來表示的方法，其也可以用多個三元組來表示，如：(小明,物種,人類)或（101大樓,位置,台北市），但是建立Knowlege Grapg一開始是建立者根據本身的domain knowledge來建立，所以可能會缺少Entities間的Relation，或是新增Entities進KG時，無法知道與哪一個Entities有關係。 所以，我目前有看到兩種方式，分別是Path Ranking Algorithm，另一種是Open-world Extention。下方是分別我現階段survey到的知識，日後如有更新就會更新於此文章： Path Ranking Algorithm ![Path_Ranking_Algo](/2020/03/01/knowledge-graph-completion/knowledge-graph-completion.png) An Open-World Extension to Knowledge Graph Completion Models https://www.aaai.org/ojs/index.php/AAAI/article/view/4162/4040 ![OWE_1](/2020/03/01/knowledge-graph-completion/OWE_1.png) ![OWE_2](/2020/03/01/knowledge-graph-completion/OWE_2.png) ![OWE_3](/2020/03/01/knowledge-graph-completion/OWE_3.png)]]></content>
+      <categories>
+        <category>Knowledge Graph</category>
+      </categories>
+      <tags>
+        <tag>Knowledge Graph</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[「Docker初心者系列」 Samba]]></title>
     <url>%2F2020%2F02%2F22%2Fdocker-new-comer-samba%2F</url>
     <content type="text"><![CDATA[為了避免丟資料進樹莓派都要上傳到網路空間，再進樹莓派下載，所以在樹莓派上起了Samba的服務，其可以讓Unix與Ｗindows或MacOS間實現網路芳鄰的機制，搭配日後安裝VNC，就可以把樹莓派放在角落獨立運行了！ 我使用的Samba的docker image是來自: https://hub.docker.com/r/dperson/samba，我啟動的comman與網路可以查到差不多： 12345docker run -it --name samba-svr -p 139:139 -p 445:445 \-v /home/pi/Public:/share \-d dperson/samba:armf \-u "登入的帳號：登入的密碼" \-s "Public;/share"過程中有幾個讓我卡住的地方，在此記錄下來 (待捕完）： 出現exec user process caused “exec format error”的錯誤訊息 這是因為預設pull下來的dperson/samba image是x86的，因樹莓派是ARM的CPU，所以必須指定aarch64或armf來使用。 (https://github.com/dperson/samba/issues/194) 雖然帶了參數-u來指定帳號與密碼，但是實際從另一台登入時，即便選了Guest一樣能進入。 待確認中… 經過上面卡關後，終於讓我把它跑起來]]></content>
@@ -72,9 +83,9 @@
         <category>etcd</category>
       </categories>
       <tags>
+        <tag>筆記</tag>
         <tag>Golang</tag>
         <tag>TIL</tag>
-        <tag>筆記</tag>
         <tag>etcd</tag>
       </tags>
   </entry>
@@ -103,8 +114,8 @@
         <category>Go</category>
       </categories>
       <tags>
-        <tag>Golang</tag>
         <tag>筆記</tag>
+        <tag>Golang</tag>
       </tags>
   </entry>
   <entry>

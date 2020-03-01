@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-02-22T11:11:53.359Z</updated>
+  <updated>2020-03-01T14:35:49.475Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>「懞懂書生」Knowledge Graph Completion</title>
+    <link href="http://yoursite.com/2020/03/01/knowledge-graph-completion/"/>
+    <id>http://yoursite.com/2020/03/01/knowledge-graph-completion/</id>
+    <published>2020-03-01T05:33:00.000Z</published>
+    <updated>2020-03-01T14:35:49.475Z</updated>
+    
+    <content type="html"><![CDATA[<p>Knowledge Graph(KG)為將知識透過Entities與Relatione用圖來表示的方法，其也可以用多個三元組來表示，如：(小明,物種,人類)或（101大樓,位置,台北市），但是建立Knowlege Grapg一開始是建立者根據本身的domain knowledge來建立，所以可能會缺少Entities間的Relation，或是新增Entities進KG時，無法知道與哪一個Entities有關係。</p><pre><code>所以，我目前有看到兩種方式，分別是Path Ranking Algorithm，另一種是Open-world Extention。下方是分別我現階段survey到的知識，日後如有更新就會更新於此文章：Path Ranking Algorithm![Path_Ranking_Algo](/2020/03/01/knowledge-graph-completion/knowledge-graph-completion.png)An Open-World Extension to Knowledge Graph Completion Modelshttps://www.aaai.org/ojs/index.php/AAAI/article/view/4162/4040 ![OWE_1](/2020/03/01/knowledge-graph-completion/OWE_1.png)![OWE_2](/2020/03/01/knowledge-graph-completion/OWE_2.png)![OWE_3](/2020/03/01/knowledge-graph-completion/OWE_3.png)</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Knowledge Graph(KG)為將知識透過Entities與Relatione用圖來表示的方法，其也可以用多個三元組來表示，如：(小明,物種,人類)或（101大樓,位置,台北市），但是建立Knowlege Grapg一開始是建立者根據本身的domain knowle
+      
+    
+    </summary>
+    
+      <category term="Knowledge Graph" scheme="http://yoursite.com/categories/Knowledge-Graph/"/>
+    
+    
+      <category term="Knowledge Graph" scheme="http://yoursite.com/tags/Knowledge-Graph/"/>
+    
+  </entry>
   
   <entry>
     <title>「Docker初心者系列」 Samba</title>
@@ -178,11 +203,11 @@
       <category term="etcd" scheme="http://yoursite.com/categories/etcd/"/>
     
     
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
       <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
     
       <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
-    
-      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
     
       <category term="etcd" scheme="http://yoursite.com/tags/etcd/"/>
     
@@ -259,9 +284,9 @@
       <category term="Go" scheme="http://yoursite.com/categories/Go/"/>
     
     
-      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
-    
       <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
     
   </entry>
   
