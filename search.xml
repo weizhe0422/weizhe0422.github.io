@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[「懞懂書生」Knowledge Graph Completion]]></title>
     <url>%2F2020%2F03%2F01%2Fknowledge-graph-completion%2F</url>
-    <content type="text"><![CDATA[Knowledge Graph(KG)為將知識透過Entities與Relatione用圖來表示的方法，其也可以用多個三元組來表示，如：(小明,物種,人類)或（101大樓,位置,台北市），但是建立Knowlege Grapg一開始是建立者根據本身的domain knowledge來建立，所以可能會缺少Entities間的Relation，或是新增Entities進KG時，無法知道與哪一個Entities有關係。 所以，我目前有看到兩種方式，分別是Path Ranking Algorithm，另一種是Open-world Extention。下方是分別我現階段survey到的知識，日後如有更新就會更新於此文章： Path Ranking Algorithm An Open-World Extension to Knowledge Graph Completion Models https://www.aaai.org/ojs/index.php/AAAI/article/view/4162/4040]]></content>
+    <content type="text"><![CDATA[Knowledge Graph(KG)為將知識透過Entities與Relatione用圖來表示的方法，其也可以用多個三元組來表示，如：(小明,物種,人類)或（101大樓,位置,台北市），但是建立Knowlege Grapg一開始是建立者根據本身的domain knowledge來建立，所以可能會缺少Entities間的Relation，或是新增Entities進KG時，無法知道與哪一個Entities有關係。 所以，我目前有看到兩種方式，分別是Path Ranking Algorithm，另一種是Open-world Extention。下方是分別我現階段survey到的知識，日後如有更新就會更新於此文章： Path Ranking Algorithm An Open-World Extension to Knowledge Graph Completion Modelshttps://www.aaai.org/ojs/index.php/AAAI/article/view/4162/4040]]></content>
       <categories>
         <category>Knowledge Graph</category>
       </categories>
@@ -84,8 +84,8 @@
       </categories>
       <tags>
         <tag>Golang</tag>
-        <tag>TIL</tag>
         <tag>筆記</tag>
+        <tag>TIL</tag>
         <tag>etcd</tag>
       </tags>
   </entry>
@@ -102,8 +102,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>筆記</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
