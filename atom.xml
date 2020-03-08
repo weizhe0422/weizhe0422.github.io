@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-03-01T14:42:35.846Z</updated>
+  <updated>2020-03-08T12:41:35.311Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,94 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>『Python 初心者』List相關methods</title>
+    <link href="http://yoursite.com/2020/03/08/python-list-tips/"/>
+    <id>http://yoursite.com/2020/03/08/python-list-tips/</id>
+    <published>2020-03-08T07:13:14.000Z</published>
+    <updated>2020-03-08T12:41:35.311Z</updated>
+    
+    <content type="html"><![CDATA[<p>針對Python中的List整理了幾個常用的methods的用法與需要注意的地方。</p><ul><li>計算List的長度與項目出現次數，其中需注意len非buit-in function<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;,&apos;b&apos;,&apos;a&apos;]</span><br><span class="line">print(&apos;length:&apos;,len(num_list))</span><br><span class="line">print(&apos;count:&apos;,num_list.count(&apos;a&apos;))</span><br></pre></td></tr></table></figure></li></ul><ul><li><p>使用Extend新增物件至List中，需注意：</p><ul><li>當給予一個List作為input參數時，會逐一將新List中的物件加入到目標List中，與Append效果不同</li><li>Extend屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 <figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]</span><br><span class="line">extend_num_list = num_list.extend([&apos;g&apos;,&apos;r&apos;])</span><br><span class="line">print(&apos;extend:&apos;,num_list)</span><br><span class="line">#built-in methods: change original list, won&apos;t return new list</span><br><span class="line">print(&apos;extend: append_num_list (before): &apos;, extend_num_list)</span><br><span class="line">extend_num_list = num_list</span><br><span class="line">print(&apos;extend: append_num_list (after): &apos;, extend_num_list)</span><br></pre></td></tr></table></figure></li></ul></li><li><p>使用Append新增物件至List中，需注意：</p><ul><li>其是用來新增一個物件，故當給予一個List時，其會直接把該List當成一個項目附加上去</li><li><p>Append屬於Built-in methods，故會直接改變原有的List，而不會回傳結果</p><figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]</span><br><span class="line">append_num_list = num_list.append([&apos;g&apos;,&apos;r&apos;])</span><br><span class="line">print(&apos;append:&apos;,num_list)</span><br><span class="line">#built-in methods: change original list, won&apos;t return new list</span><br><span class="line">print(&apos;append: append_num_list (before): &apos;, append_num_list)</span><br><span class="line">append_num_list = num_list</span><br><span class="line">print(&apos;append: append_num_list (after): &apos;, append_num_list)</span><br></pre></td></tr></table></figure></li><li><p>透過pop來取得List中項目，需注意：</p><ul><li>如沒有傳入參數，則預設是回傳List最後一個item；否則，回傳指定的items</li><li>使用pop會將該項目從List中移除<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]</span><br><span class="line">num_list.pop()</span><br><span class="line">print(&apos;pop:&apos;,num_list)</span><br><span class="line">pop_item = num_list.pop(1)</span><br><span class="line">print(&apos;pop:&apos;,num_list,&apos;, pop_item:&apos;,pop_item)</span><br></pre></td></tr></table></figure></li></ul></li><li><p>使用remove來移除指定的value，需注意</p><ul><li>如有多個value符合，則會移除從頭數來的第一個</li><li>remove屬於Built-in methods，故會直接改變原有的List，而不會回傳結果<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;,&apos;b&apos;,&apos;a&apos;]</span><br><span class="line">new_remove_list = num_list.remove(&apos;x&apos;)</span><br><span class="line">print(&apos;remove:&apos;,num_list)</span><br><span class="line">print(&apos;remove:&apos;,new_remove_list)</span><br><span class="line">num_list.remove(&apos;a&apos;)</span><br><span class="line">print(&apos;remove:&apos;,num_list)</span><br></pre></td></tr></table></figure></li></ul></li><li><p>透過index來取得value於List出現的位置，需注意：</p><ul><li>當想要找的Item不在指定的搜尋範圍中時，其會跳出Exception，故要記得加上try…except避免程式的中斷<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]</span><br><span class="line">print(&apos;index:&apos;,num_list.index(&apos;d&apos;,0,len(num_list)))</span><br><span class="line">try:</span><br><span class="line">  print(&apos;index:&apos;,num_list.index(&apos;d&apos;,0,3))</span><br><span class="line">except Exception as e:</span><br><span class="line">  print(&apos;index: exception happened:&apos;,e)</span><br></pre></td></tr></table></figure></li></ul></li><li><p>使用<code>sort()</code>與<code>sorted()</code>來排序List中的物件，需注意：</p><ul><li><code>sort()</code>為Built-in methods，故會直接影響List內的排序，且不會回傳新的List</li><li><code>sorted()</code>為function，故不會改變原來的List，而是需要一個新的List來接收排序過後的List<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]</span><br><span class="line">num_list_1=num_list[:]</span><br><span class="line">sorted(num_list_1)</span><br><span class="line">print(&apos;num_list:&apos;,num_list)</span><br><span class="line">print(&apos;num_list_1:&apos;,num_list_1)</span><br><span class="line">new_num_list_1 = sorted(num_list_1)</span><br><span class="line">print(&apos;new_num_list_1:&apos;,new_num_list_1)</span><br><span class="line"></span><br><span class="line">num_list_2 = num_list[:]</span><br><span class="line">num_list_2.sort()</span><br><span class="line">print(&apos;num_list:&apos;,num_list)</span><br><span class="line">print(&apos;num_list_2:&apos;,num_list_2)</span><br><span class="line">#built-in methods: change original list, won&apos;t return new list</span><br><span class="line">print(&apos;num_list_2:&apos;,num_list_2.sort())</span><br></pre></td></tr></table></figure></li></ul></li><li><p>利用<code>join()</code>與<code>split()</code>來拆解string成為List與合併List成為string，需注意：</p><ul><li><code>join()</code>是由串接的字元來呼叫，並且傳入想要合併的List</li><li><code>split()</code>則是由目標的List來呼叫，並且傳入拆解的字元<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str_list = [&apos;hi&apos;,&apos;my&apos;,&apos;name&apos;,&apos;is&apos;,&apos;ray&apos;]</span><br><span class="line">join_string = &apos; &apos;.join(str_list)</span><br><span class="line">print(&apos;join:&apos;,join_string)</span><br><span class="line">split_string = join_string.split(&apos; &apos;)</span><br><span class="line">print(split_string)</span><br></pre></td></tr></table></figure></li></ul></li><li><p>使用Unpacking來指定List中各item對應的變數名稱，需注意：</p><ul><li>可以透過指標的方式來將List中連續的item指定給他，其方式可以參考下面<figure class="highlight plain"><figcaption><span>lang=python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a, b, c , *other, d = [1,2,3,4,5,6,7,8,9]</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(c)</span><br><span class="line">print(other)</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure></li></ul></li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;針對Python中的List整理了幾個常用的methods的用法與需要注意的地方。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;計算List的長度與項目出現次數，其中需注意len非buit-in function&lt;figure class=&quot;highlight plain&quot;&gt;&lt;figcapt
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="http://yoursite.com/categories/Python/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="初心者" scheme="http://yoursite.com/tags/%E5%88%9D%E5%BF%83%E8%80%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>『Python 初心者』  List： Copy 或是 Reference</title>
+    <link href="http://yoursite.com/2020/03/08/python-list-ref-or-copy/"/>
+    <id>http://yoursite.com/2020/03/08/python-list-ref-or-copy/</id>
+    <published>2020-03-08T05:21:59.000Z</published>
+    <updated>2020-03-08T12:08:25.603Z</updated>
+    
+    <content type="html"><![CDATA[<p>當你使用Python中的List，並且想要複製一份新的List並進行修改時，會發現可能不小心改了原本List中的東西，故我在這邊紀錄一下，提醒自己不要犯同樣的錯。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">amazon_cart = [<span class="string">'notebook'</span>, <span class="string">'toy'</span>, <span class="string">'grapes'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#Reference</span></span><br><span class="line">new_cart_1 = amazon_cart</span><br><span class="line"><span class="comment">#Copy</span></span><br><span class="line">new_cart_2 = amazon_cart[:]</span><br><span class="line"></span><br><span class="line">amazon_cart[<span class="number">0</span>] = <span class="string">'laptop'</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">'amazon_cart:'</span>,amazon_cart)</span><br><span class="line">print(<span class="string">'new_cart_1:'</span>,new_cart_1)</span><br><span class="line">print(<span class="string">'new_cart_2:'</span>,new_cart_2)</span><br></pre></td></tr></table></figure><p>首先，我們把amazon_cart裝滿三個東西，然後新增兩個購物車分別透過Reference與Copy的方式分別新增了購物車1與購物車2，接著我們修改了amazon_cart中第一個item，接著把amazon_cart、new_cart_1與new_cart_２列印出來</p><p><img src="/2020/03/08/python-list-ref-or-copy/python_list_ref_or_copy_result.png" alt="python_list_ref_or_copy_result"></p><p>我們發現使用<code>new_cart_1 = amazon_cart</code>代表了Reference，當amazon_cart或new_cart_1改變時，其會互相影響；而<code>new_cart_2 = amazon_cart[:]</code>則是使用COPY的方式，amazon_cart或new_cart_2其中一邊新增修改list中的項目時，並不會互相影響。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;當你使用Python中的List，並且想要複製一份新的List並進行修改時，會發現可能不小心改了原本List中的東西，故我在這邊紀錄一下，提醒自己不要犯同樣的錯。&lt;/p&gt;
+&lt;figure class=&quot;highlight python&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td cla
+      
+    
+    </summary>
+    
+      <category term="Python" scheme="http://yoursite.com/categories/Python/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="初心者" scheme="http://yoursite.com/tags/%E5%88%9D%E5%BF%83%E8%80%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>「Docker初心者系列」 NGINX File Server</title>
+    <link href="http://yoursite.com/2020/03/04/docker-new-comer-nginx-file-server/"/>
+    <id>http://yoursite.com/2020/03/04/docker-new-comer-nginx-file-server/</id>
+    <published>2020-03-04T15:59:18.000Z</published>
+    <updated>2020-03-04T17:09:08.916Z</updated>
+    
+    <content type="html"><![CDATA[<p>為了要樹莓派裡面的資料夾作為file server分享出去，搞了好久，今天晚上終於成功，所以把過程記錄下來，最終結果會像下面這樣：<br><img src="/2020/03/04/docker-new-comer-nginx-file-server/final_result.png" alt="final_result"></p><ul><li>Step 1: 先把你的樹莓派的IP固定下來，否則等等在Hub上就無法針對特定內網IP開放Port<br>參考：<a href="http://yhhuang1966.blogspot.com/2019/03/wifi-ip.html" target="_blank" rel="noopener">http://yhhuang1966.blogspot.com/2019/03/wifi-ip.html</a>  <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cd /etc</span><br><span class="line"><span class="meta">$</span> sudo cp dhcpcd.conf dhcpcd.conf.old</span><br><span class="line"><span class="meta">$</span> sudo nano /etc/dhcpcd.conf</span><br></pre></td></tr></table></figure></li></ul><p>接著檔案最下面加上如下圖的內容：<br><img src="/2020/03/04/docker-new-comer-nginx-file-server/raspberry_static_ip.png" alt="raspberry_static_ip"><br>其中ip_address可用樹莓派目前使用拿到的IP來設定(於終端機ifconfig可以查詢得到)，而routers與domain_name_servers則可以用你們家路由器Hub的IP位置，中華電信通常是192.168.1.1。</p><ul><li><p>Step 2: 因為NGINX預設啟動時是不會把整個目錄分享出去，故你得把autoindex設定打開。故先找一個暫存位置，如/home/pi/Templates下建立起一個檔案：default.conf，然後把參考<a href="https://github.com/weizhe0422/weizhe0422.github.io/blob/master/2020/03/04/docker-new-comer-nginx-file-server/default.conf" target="_blank" rel="noopener">這個位置</a>先貼上預設值，接著於location中分別加: <code>autoindex_exact_size off;</code>與<code>autoindex on;</code>，其內容會如下圖：<br><img src="/2020/03/04/docker-new-comer-nginx-file-server/nginx_autoindex_on.png" alt="nginx_autoindex_on"></p></li><li><p>Step 3: 接著，就是來把NGINX的docker image啟動起來，你得先決定好你要開放的資料夾，如我是把/home/pi/Public/FileServer開放出去。 所以我的docker啟動指令會如下面這樣：</p> <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run --name ngx_fsr \</span><br><span class="line">-v /home/pi/Templates/default.conf:/etc/nginx/conf.d/default.conf \</span><br><span class="line">-v /home/pi/Public/FileServer:/usr/share/nginx/html:ro \</span><br><span class="line">-d -p 80:80 \</span><br><span class="line">nginx</span><br></pre></td></tr></table></figure><p>其中第一個<code>-v</code>代表啟動NGINX的時候是參考我們修改過後的default.conf來啟動，而第二個<code>-v</code>則是把你要開放的資料夾對應到NGINX的公開分享資料夾。 接著使用<code>docker ps</code>來看一下是否有啟動成功！ 這邊要記得，如果你資料夾內有index.html，則預設會先顯示index.html內容。</p></li></ul><ul><li>Step 4: 好啦！ 倒數第二步，就是要把對外的port打開，讓你可以從外部連存取你的file server內容。 首先，輸入你hub的IP位置，像我的是192.168.1.1，登入後從選單中找尋”Port Forwarding”（每個廠商路由器登入後的介面不盡相同，這個可以Google查一下你的在哪裡)。<br><img src="/2020/03/04/docker-new-comer-nginx-file-server/hub_menu.png" alt="hub_menu"></li></ul><p>然後開始進行設定，其中IP就填上你於Step 1中樹莓派中設定的IP，然後在Port對應列表中填上你要開放的port number，接著儲存。<br><img src="/2020/03/04/docker-new-comer-nginx-file-server/virtual_servers.png" alt="virtual_servers"></p><ul><li>Step 5: 到<a href="https://myip.com.tw/" target="_blank" rel="noopener">https://myip.com.tw/</a> 查詢你對外的IP為何，如此就可以於外部系統用這個對外IP加上你開放的Port(如:<a href="http://134.181.63.98:80" target="_blank" rel="noopener">http://134.181.63.98:80</a> ）連入你於樹莓派開放的資料夾囉！！！</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;為了要樹莓派裡面的資料夾作為file server分享出去，搞了好久，今天晚上終於成功，所以把過程記錄下來，最終結果會像下面這樣：&lt;br&gt;&lt;img src=&quot;/2020/03/04/docker-new-comer-nginx-file-server/final_resul
+      
+    
+    </summary>
+    
+      <category term="Docker" scheme="http://yoursite.com/categories/Docker/"/>
+    
+    
+      <category term="Respberry Pi" scheme="http://yoursite.com/tags/Respberry-Pi/"/>
+    
+      <category term="Docker" scheme="http://yoursite.com/tags/Docker/"/>
+    
+      <category term="NGINX" scheme="http://yoursite.com/tags/NGINX/"/>
+    
+      <category term="File Server" scheme="http://yoursite.com/tags/File-Server/"/>
+    
+  </entry>
   
   <entry>
     <title>「懞懂書生」Knowledge Graph Completion</title>
@@ -205,9 +293,9 @@
     
       <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
     
-      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
-    
       <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
     
       <category term="etcd" scheme="http://yoursite.com/tags/etcd/"/>
     
@@ -257,9 +345,9 @@
       <category term="Hexo" scheme="http://yoursite.com/categories/Hexo/"/>
     
     
-      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
-    
       <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
     
   </entry>
   

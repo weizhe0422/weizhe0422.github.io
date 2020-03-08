@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[『Python 初心者』List相關methods]]></title>
+    <url>%2F2020%2F03%2F08%2Fpython-list-tips%2F</url>
+    <content type="text"><![CDATA[針對Python中的List整理了幾個常用的methods的用法與需要注意的地方。 計算List的長度與項目出現次數，其中需注意len非buit-in functionlang=python123num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;,&apos;b&apos;,&apos;a&apos;]print(&apos;length:&apos;,len(num_list))print(&apos;count:&apos;,num_list.count(&apos;a&apos;)) 使用Extend新增物件至List中，需注意： 當給予一個List作為input參數時，會逐一將新List中的物件加入到目標List中，與Append效果不同 Extend屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 lang=python1234567num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]extend_num_list = num_list.extend([&apos;g&apos;,&apos;r&apos;])print(&apos;extend:&apos;,num_list)#built-in methods: change original list, won&apos;t return new listprint(&apos;extend: append_num_list (before): &apos;, extend_num_list)extend_num_list = num_listprint(&apos;extend: append_num_list (after): &apos;, extend_num_list) 使用Append新增物件至List中，需注意： 其是用來新增一個物件，故當給予一個List時，其會直接把該List當成一個項目附加上去 Append屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 lang=python1234567num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]append_num_list = num_list.append([&apos;g&apos;,&apos;r&apos;])print(&apos;append:&apos;,num_list)#built-in methods: change original list, won&apos;t return new listprint(&apos;append: append_num_list (before): &apos;, append_num_list)append_num_list = num_listprint(&apos;append: append_num_list (after): &apos;, append_num_list) 透過pop來取得List中項目，需注意： 如沒有傳入參數，則預設是回傳List最後一個item；否則，回傳指定的items 使用pop會將該項目從List中移除lang=python12345num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]num_list.pop()print(&apos;pop:&apos;,num_list)pop_item = num_list.pop(1)print(&apos;pop:&apos;,num_list,&apos;, pop_item:&apos;,pop_item) 使用remove來移除指定的value，需注意 如有多個value符合，則會移除從頭數來的第一個 remove屬於Built-in methods，故會直接改變原有的List，而不會回傳結果lang=python123456num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;,&apos;b&apos;,&apos;a&apos;]new_remove_list = num_list.remove(&apos;x&apos;)print(&apos;remove:&apos;,num_list)print(&apos;remove:&apos;,new_remove_list)num_list.remove(&apos;a&apos;)print(&apos;remove:&apos;,num_list) 透過index來取得value於List出現的位置，需注意： 當想要找的Item不在指定的搜尋範圍中時，其會跳出Exception，故要記得加上try…except避免程式的中斷lang=python123456num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]print(&apos;index:&apos;,num_list.index(&apos;d&apos;,0,len(num_list)))try: print(&apos;index:&apos;,num_list.index(&apos;d&apos;,0,3))except Exception as e: print(&apos;index: exception happened:&apos;,e) 使用sort()與sorted()來排序List中的物件，需注意： sort()為Built-in methods，故會直接影響List內的排序，且不會回傳新的List sorted()為function，故不會改變原來的List，而是需要一個新的List來接收排序過後的Listlang=python1234567891011121314num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]num_list_1=num_list[:]sorted(num_list_1)print(&apos;num_list:&apos;,num_list)print(&apos;num_list_1:&apos;,num_list_1)new_num_list_1 = sorted(num_list_1)print(&apos;new_num_list_1:&apos;,new_num_list_1)num_list_2 = num_list[:]num_list_2.sort()print(&apos;num_list:&apos;,num_list)print(&apos;num_list_2:&apos;,num_list_2)#built-in methods: change original list, won&apos;t return new listprint(&apos;num_list_2:&apos;,num_list_2.sort()) 利用join()與split()來拆解string成為List與合併List成為string，需注意： join()是由串接的字元來呼叫，並且傳入想要合併的List split()則是由目標的List來呼叫，並且傳入拆解的字元lang=python12345str_list = [&apos;hi&apos;,&apos;my&apos;,&apos;name&apos;,&apos;is&apos;,&apos;ray&apos;]join_string = &apos; &apos;.join(str_list)print(&apos;join:&apos;,join_string)split_string = join_string.split(&apos; &apos;)print(split_string) 使用Unpacking來指定List中各item對應的變數名稱，需注意： 可以透過指標的方式來將List中連續的item指定給他，其方式可以參考下面lang=python123456a, b, c , *other, d = [1,2,3,4,5,6,7,8,9]print(a)print(b)print(c)print(other)print(d)]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>初心者</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[『Python 初心者』 List： Copy 或是 Reference]]></title>
+    <url>%2F2020%2F03%2F08%2Fpython-list-ref-or-copy%2F</url>
+    <content type="text"><![CDATA[當你使用Python中的List，並且想要複製一份新的List並進行修改時，會發現可能不小心改了原本List中的東西，故我在這邊紀錄一下，提醒自己不要犯同樣的錯。 123456789101112amazon_cart = ['notebook', 'toy', 'grapes']#Referencenew_cart_1 = amazon_cart#Copynew_cart_2 = amazon_cart[:]amazon_cart[0] = 'laptop'print('amazon_cart:',amazon_cart)print('new_cart_1:',new_cart_1)print('new_cart_2:',new_cart_2) 首先，我們把amazon_cart裝滿三個東西，然後新增兩個購物車分別透過Reference與Copy的方式分別新增了購物車1與購物車2，接著我們修改了amazon_cart中第一個item，接著把amazon_cart、new_cart_1與new_cart_２列印出來 我們發現使用new_cart_1 = amazon_cart代表了Reference，當amazon_cart或new_cart_1改變時，其會互相影響；而new_cart_2 = amazon_cart[:]則是使用COPY的方式，amazon_cart或new_cart_2其中一邊新增修改list中的項目時，並不會互相影響。]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>初心者</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[「Docker初心者系列」 NGINX File Server]]></title>
+    <url>%2F2020%2F03%2F04%2Fdocker-new-comer-nginx-file-server%2F</url>
+    <content type="text"><![CDATA[為了要樹莓派裡面的資料夾作為file server分享出去，搞了好久，今天晚上終於成功，所以把過程記錄下來，最終結果會像下面這樣： Step 1: 先把你的樹莓派的IP固定下來，否則等等在Hub上就無法針對特定內網IP開放Port參考：http://yhhuang1966.blogspot.com/2019/03/wifi-ip.html 123$ cd /etc$ sudo cp dhcpcd.conf dhcpcd.conf.old$ sudo nano /etc/dhcpcd.conf 接著檔案最下面加上如下圖的內容：其中ip_address可用樹莓派目前使用拿到的IP來設定(於終端機ifconfig可以查詢得到)，而routers與domain_name_servers則可以用你們家路由器Hub的IP位置，中華電信通常是192.168.1.1。 Step 2: 因為NGINX預設啟動時是不會把整個目錄分享出去，故你得把autoindex設定打開。故先找一個暫存位置，如/home/pi/Templates下建立起一個檔案：default.conf，然後把參考這個位置先貼上預設值，接著於location中分別加: autoindex_exact_size off;與autoindex on;，其內容會如下圖： Step 3: 接著，就是來把NGINX的docker image啟動起來，你得先決定好你要開放的資料夾，如我是把/home/pi/Public/FileServer開放出去。 所以我的docker啟動指令會如下面這樣： 12345docker run --name ngx_fsr \-v /home/pi/Templates/default.conf:/etc/nginx/conf.d/default.conf \-v /home/pi/Public/FileServer:/usr/share/nginx/html:ro \-d -p 80:80 \nginx 其中第一個-v代表啟動NGINX的時候是參考我們修改過後的default.conf來啟動，而第二個-v則是把你要開放的資料夾對應到NGINX的公開分享資料夾。 接著使用docker ps來看一下是否有啟動成功！ 這邊要記得，如果你資料夾內有index.html，則預設會先顯示index.html內容。 Step 4: 好啦！ 倒數第二步，就是要把對外的port打開，讓你可以從外部連存取你的file server內容。 首先，輸入你hub的IP位置，像我的是192.168.1.1，登入後從選單中找尋”Port Forwarding”（每個廠商路由器登入後的介面不盡相同，這個可以Google查一下你的在哪裡)。 然後開始進行設定，其中IP就填上你於Step 1中樹莓派中設定的IP，然後在Port對應列表中填上你要開放的port number，接著儲存。 Step 5: 到https://myip.com.tw/ 查詢你對外的IP為何，如此就可以於外部系統用這個對外IP加上你開放的Port(如:http://134.181.63.98:80 ）連入你於樹莓派開放的資料夾囉！！！]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Respberry Pi</tag>
+        <tag>Docker</tag>
+        <tag>NGINX</tag>
+        <tag>File Server</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[「懞懂書生」Knowledge Graph Completion]]></title>
     <url>%2F2020%2F03%2F01%2Fknowledge-graph-completion%2F</url>
     <content type="text"><![CDATA[Knowledge Graph(KG)為將知識透過Entities與Relatione用圖來表示的方法，其也可以用多個三元組來表示，如：(小明,物種,人類)或（101大樓,位置,台北市），但是建立Knowlege Grapg一開始是建立者根據本身的domain knowledge來建立，所以可能會缺少Entities間的Relation，或是新增Entities進KG時，無法知道與哪一個Entities有關係。 所以，我目前有看到兩種方式，分別是Path Ranking Algorithm，另一種是Open-world Extention。下方是分別我現階段survey到的知識，日後如有更新就會更新於此文章： Path Ranking Algorithm An Open-World Extension to Knowledge Graph Completion Modelshttps://www.aaai.org/ojs/index.php/AAAI/article/view/4162/4040]]></content>
@@ -84,8 +122,8 @@
       </categories>
       <tags>
         <tag>Golang</tag>
-        <tag>筆記</tag>
         <tag>TIL</tag>
+        <tag>筆記</tag>
         <tag>etcd</tag>
       </tags>
   </entry>
@@ -102,8 +140,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>筆記</tag>
         <tag>Hexo</tag>
+        <tag>筆記</tag>
       </tags>
   </entry>
   <entry>
