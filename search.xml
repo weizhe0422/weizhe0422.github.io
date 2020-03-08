@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[『Python 初心者』List相關methods]]></title>
     <url>%2F2020%2F03%2F08%2Fpython-list-tips%2F</url>
-    <content type="text"><![CDATA[針對Python中的List整理了幾個常用的methods的用法與需要注意的地方。 計算List的長度與項目出現次數，其中需注意len非buit-in functionlang=Python123num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;,&apos;b&apos;,&apos;a&apos;]print(&apos;length:&apos;,len(num_list))print(&apos;count:&apos;,num_list.count(&apos;a&apos;)) 使用Extend新增物件至List中，需注意： 當給予一個List作為input參數時，會逐一將新List中的物件加入到目標List中，與Append效果不同 Extend屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 lang=Python1234567num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]extend_num_list = num_list.extend([&apos;g&apos;,&apos;r&apos;])print(&apos;extend:&apos;,num_list)#built-in methods: change original list, won&apos;t return new listprint(&apos;extend: append_num_list (before): &apos;, extend_num_list)extend_num_list = num_listprint(&apos;extend: append_num_list (after): &apos;, extend_num_list) 使用Append新增物件至List中，需注意： 其是用來新增一個物件，故當給予一個List時，其會直接把該List當成一個項目附加上去 Append屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 lang=Python1234567num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]append_num_list = num_list.append([&apos;g&apos;,&apos;r&apos;])print(&apos;append:&apos;,num_list)#built-in methods: change original list, won&apos;t return new listprint(&apos;append: append_num_list (before): &apos;, append_num_list)append_num_list = num_listprint(&apos;append: append_num_list (after): &apos;, append_num_list) 透過pop來取得List中項目，需注意： 如沒有傳入參數，則預設是回傳List最後一個item；否則，回傳指定的items 使用pop會將該項目從List中移除lang=Python12345num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]num_list.pop()print(&apos;pop:&apos;,num_list)pop_item = num_list.pop(1)print(&apos;pop:&apos;,num_list,&apos;, pop_item:&apos;,pop_item) 使用remove來移除指定的value，需注意 如有多個value符合，則會移除從頭數來的第一個 remove屬於Built-in methods，故會直接改變原有的List，而不會回傳結果lang=Python123456num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;,&apos;b&apos;,&apos;a&apos;]new_remove_list = num_list.remove(&apos;x&apos;)print(&apos;remove:&apos;,num_list)print(&apos;remove:&apos;,new_remove_list)num_list.remove(&apos;a&apos;)print(&apos;remove:&apos;,num_list) 透過index來取得value於List出現的位置，需注意： 當想要找的Item不在指定的搜尋範圍中時，其會跳出Exception，故要記得加上try…except避免程式的中斷lang=Python123456num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]print(&apos;index:&apos;,num_list.index(&apos;d&apos;,0,len(num_list)))try: print(&apos;index:&apos;,num_list.index(&apos;d&apos;,0,3))except Exception as e: print(&apos;index: exception happened:&apos;,e) 使用sort()與sorted()來排序List中的物件，需注意： sort()為Built-in methods，故會直接影響List內的排序，且不會回傳新的List sorted()為function，故不會改變原來的List，而是需要一個新的List來接收排序過後的Listlang=Python1234567891011121314num_list = [&apos;a&apos;,&apos;b&apos;,&apos;x&apos;,&apos;e&apos;,&apos;f&apos;,&apos;d&apos;]num_list_1=num_list[:]sorted(num_list_1)print(&apos;num_list:&apos;,num_list)print(&apos;num_list_1:&apos;,num_list_1)new_num_list_1 = sorted(num_list_1)print(&apos;new_num_list_1:&apos;,new_num_list_1)num_list_2 = num_list[:]num_list_2.sort()print(&apos;num_list:&apos;,num_list)print(&apos;num_list_2:&apos;,num_list_2)#built-in methods: change original list, won&apos;t return new listprint(&apos;num_list_2:&apos;,num_list_2.sort()) 利用join()與split()來拆解string成為List與合併List成為string，需注意： join()是由串接的字元來呼叫，並且傳入想要合併的List split()則是由目標的List來呼叫，並且傳入拆解的字元lang=Python12345str_list = [&apos;hi&apos;,&apos;my&apos;,&apos;name&apos;,&apos;is&apos;,&apos;ray&apos;]join_string = &apos; &apos;.join(str_list)print(&apos;join:&apos;,join_string)split_string = join_string.split(&apos; &apos;)print(split_string) 使用Unpacking來指定List中各item對應的變數名稱，需注意： 可以透過指標的方式來將List中連續的item指定給他，其方式可以參考下面lang=Python123456a, b, c , *other, d = [1,2,3,4,5,6,7,8,9]print(a)print(b)print(c)print(other)print(d)]]></content>
+    <content type="text"><![CDATA[針對Python中的List整理了幾個常用的methods的用法與需要注意的地方。 計算List的長度與項目出現次數，其中需注意len非buit-in function123num_list = ['a','b','x','e','f','d','b','a']print('length:',len(num_list))print('count:',num_list.count('a')) 使用Extend新增物件至List中，需注意： 當給予一個List作為input參數時，會逐一將新List中的物件加入到目標List中，與Append效果不同 Extend屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 1234567num_list = ['a','b','x','e','f','d']extend_num_list = num_list.extend(['g','r'])print('extend:',num_list)#built-in methods: change original list, won't return new listprint('extend: append_num_list (before): ', extend_num_list)extend_num_list = num_listprint('extend: append_num_list (after): ', extend_num_list) 使用Append新增物件至List中，需注意： 其是用來新增一個物件，故當給予一個List時，其會直接把該List當成一個項目附加上去 Append屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 1234567num_list = ['a','b','x','e','f','d']append_num_list = num_list.append(['g','r'])print('append:',num_list)#built-in methods: change original list, won't return new listprint('append: append_num_list (before): ', append_num_list)append_num_list = num_listprint('append: append_num_list (after): ', append_num_list) 透過pop來取得List中項目，需注意： 如沒有傳入參數，則預設是回傳List最後一個item；否則，回傳指定的items 使用pop會將該項目從List中移除12345num_list = ['a','b','x','e','f','d']num_list.pop()print('pop:',num_list)pop_item = num_list.pop(1)print('pop:',num_list,', pop_item:',pop_item) 使用remove來移除指定的value，需注意 如有多個value符合，則會移除從頭數來的第一個 remove屬於Built-in methods，故會直接改變原有的List，而不會回傳結果123456num_list = ['a','b','x','e','f','d','b','a']new_remove_list = num_list.remove('x')print('remove:',num_list)print('remove:',new_remove_list)num_list.remove('a')print('remove:',num_list) 透過index來取得value於List出現的位置，需注意： 當想要找的Item不在指定的搜尋範圍中時，其會跳出Exception，故要記得加上try…except避免程式的中斷123456num_list = ['a','b','x','e','f','d']print('index:',num_list.index('d',0,len(num_list)))try: print('index:',num_list.index('d',0,3))except Exception as e: print('index: exception happened:',e) 使用sort()與sorted()來排序List中的物件，需注意： sort()為Built-in methods，故會直接影響List內的排序，且不會回傳新的List sorted()為function，故不會改變原來的List，而是需要一個新的List來接收排序過後的List1234567891011121314num_list = ['a','b','x','e','f','d']num_list_1=num_list[:]sorted(num_list_1)print('num_list:',num_list)print('num_list_1:',num_list_1)new_num_list_1 = sorted(num_list_1)print('new_num_list_1:',new_num_list_1)num_list_2 = num_list[:]num_list_2.sort()print('num_list:',num_list)print('num_list_2:',num_list_2)#built-in methods: change original list, won't return new listprint('num_list_2:',num_list_2.sort()) 利用join()與split()來拆解string成為List與合併List成為string，需注意： join()是由串接的字元來呼叫，並且傳入想要合併的List split()則是由目標的List來呼叫，並且傳入拆解的字元12345str_list = ['hi','my','name','is','ray']join_string = ' '.join(str_list)print('join:',join_string)split_string = join_string.split(' ')print(split_string) 使用Unpacking來指定List中各item對應的變數名稱，需注意： 可以透過指標的方式來將List中連續的item指定給他，其方式可以參考下面123456a, b, c , *other, d = [1,2,3,4,5,6,7,8,9]print(a)print(b)print(c)print(other)print(d)]]></content>
       <categories>
         <category>Python</category>
       </categories>
@@ -121,9 +121,9 @@
         <category>etcd</category>
       </categories>
       <tags>
-        <tag>筆記</tag>
         <tag>Golang</tag>
         <tag>TIL</tag>
+        <tag>筆記</tag>
         <tag>etcd</tag>
       </tags>
   </entry>
@@ -140,8 +140,8 @@
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
         <tag>筆記</tag>
+        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -152,8 +152,8 @@
         <category>Go</category>
       </categories>
       <tags>
-        <tag>筆記</tag>
         <tag>Golang</tag>
+        <tag>筆記</tag>
       </tags>
   </entry>
   <entry>
