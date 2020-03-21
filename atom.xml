@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-03-08T13:21:47.186Z</updated>
+  <updated>2020-03-21T02:05:48.207Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>「Golang筆記」如何使用SMTP來寄信</title>
+    <link href="http://yoursite.com/2020/03/20/Golang-send-mail/"/>
+    <id>http://yoursite.com/2020/03/20/Golang-send-mail/</id>
+    <published>2020-03-19T16:34:51.000Z</published>
+    <updated>2020-03-21T02:05:48.207Z</updated>
+    
+    <content type="html"><![CDATA[<p>記錄一下如何透過Golang中的smtp package來寄信，這邊會應用出的功能為透過查詢外部IP網頁回傳的IP，然後寄信到指定的信箱。開始吧！</p><p>程式碼長度其實非常的短，主要分兩大部分，第一部分為發出HTTP Request拿到查詢外部IP網頁回傳的IP，其內容如下：<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">resp, err := http.Get(<span class="string">"http://myexternalip.com/raw"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">log.Fatalf(<span class="string">"failed to query web page: %v"</span>,err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">defer</span> resp.Body.Close()</span><br><span class="line"></span><br><span class="line">strIP, _ := ioutil.ReadAll(resp.Body)</span><br></pre></td></tr></table></figure></p><p>接著，我們開始使用SMTP來寄信，以下會用Gmail的mail server來做完參數傳入<code>smtp.SendMail</code> function:</p><ul><li>第一個參數為根據<a href="https://support.google.com/mail/answer/7126229?hl=zh-Hant" target="_blank" rel="noopener">https://support.google.com/mail/answer/7126229?hl=zh-Hant</a> 中提到”外寄郵件 (SMTP) 伺服器“為<code>smtp.gmail.com</code>且port設定成<code>587</code>就可以用TLS傳輸。</li><li>第二個參數即是要傳入向smtp認證的結果，這時可用<code>smtp.PlainAuth</code>並帶入Gmail帳號密碼。</li><li>第三個到第五個參數則是依序傳入你的Gmail信箱、目標信箱以及內容<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from := <span class="string">"你的GMAIL帳號"</span></span><br><span class="line">pass := <span class="string">"你的GMAIL密碼"</span></span><br><span class="line">to := <span class="string">"目標的信箱"</span></span><br><span class="line"></span><br><span class="line">err = smtp.SendMail(<span class="string">"smtp.gmail.com:587"</span>,</span><br><span class="line">                smtp.PlainAuth(<span class="string">""</span>, from, pass, <span class="string">"smtp.gmail.com"</span>),</span><br><span class="line">                from, []<span class="keyword">string</span>&#123;to&#125;, []<span class="keyword">byte</span>(<span class="keyword">string</span>(strIP))))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">log.Fatalf(<span class="string">"failed to send mail: %v"</span>,err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ul><p>好啦！ 以上撰寫完成，就可以讓他run在一個有crontab的Docker Container，固定開始寄信囉！</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;記錄一下如何透過Golang中的smtp package來寄信，這邊會應用出的功能為透過查詢外部IP網頁回傳的IP，然後寄信到指定的信箱。開始吧！&lt;/p&gt;
+&lt;p&gt;程式碼長度其實非常的短，主要分兩大部分，第一部分為發出HTTP Request拿到查詢外部IP網頁回傳的IP，其
+      
+    
+    </summary>
+    
+      <category term="Go" scheme="http://yoursite.com/categories/Go/"/>
+    
+    
+      <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
+    
+      <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
+  </entry>
   
   <entry>
     <title>『Python 初心者』List相關methods</title>
@@ -293,9 +321,9 @@
     
       <category term="Golang" scheme="http://yoursite.com/tags/Golang/"/>
     
-      <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
-    
       <category term="筆記" scheme="http://yoursite.com/tags/%E7%AD%86%E8%A8%98/"/>
+    
+      <category term="TIL" scheme="http://yoursite.com/tags/TIL/"/>
     
       <category term="etcd" scheme="http://yoursite.com/tags/etcd/"/>
     

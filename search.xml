@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[「Golang筆記」如何使用SMTP來寄信]]></title>
+    <url>%2F2020%2F03%2F20%2FGolang-send-mail%2F</url>
+    <content type="text"><![CDATA[記錄一下如何透過Golang中的smtp package來寄信，這邊會應用出的功能為透過查詢外部IP網頁回傳的IP，然後寄信到指定的信箱。開始吧！ 程式碼長度其實非常的短，主要分兩大部分，第一部分為發出HTTP Request拿到查詢外部IP網頁回傳的IP，其內容如下：1234567resp, err := http.Get("http://myexternalip.com/raw")if err != nil &#123; log.Fatalf("failed to query web page: %v",err)&#125;defer resp.Body.Close()strIP, _ := ioutil.ReadAll(resp.Body) 接著，我們開始使用SMTP來寄信，以下會用Gmail的mail server來做完參數傳入smtp.SendMail function: 第一個參數為根據https://support.google.com/mail/answer/7126229?hl=zh-Hant 中提到”外寄郵件 (SMTP) 伺服器“為smtp.gmail.com且port設定成587就可以用TLS傳輸。 第二個參數即是要傳入向smtp認證的結果，這時可用smtp.PlainAuth並帶入Gmail帳號密碼。 第三個到第五個參數則是依序傳入你的Gmail信箱、目標信箱以及內容1234567891011from := "你的GMAIL帳號"pass := "你的GMAIL密碼"to := "目標的信箱"err = smtp.SendMail("smtp.gmail.com:587", smtp.PlainAuth("", from, pass, "smtp.gmail.com"), from, []string&#123;to&#125;, []byte(string(strIP))))if err != nil &#123; log.Fatalf("failed to send mail: %v",err)&#125; 好啦！ 以上撰寫完成，就可以讓他run在一個有crontab的Docker Container，固定開始寄信囉！]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Golang</tag>
+        <tag>筆記</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[『Python 初心者』List相關methods]]></title>
     <url>%2F2020%2F03%2F08%2Fpython-list-tips%2F</url>
     <content type="text"><![CDATA[針對Python中的List整理了幾個常用的methods的用法與需要注意的地方。 計算List的長度與項目出現次數，其中需注意len非buit-in function123num_list = ['a','b','x','e','f','d','b','a']print('length:',len(num_list)) # length: 8 print('count:',num_list.count('a')) # count: 2 使用Extend新增物件至List中，需注意： 當給予一個List作為input參數時，會逐一將新List中的物件加入到目標List中，與Append效果不同 Extend屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 1234567num_list = ['a','b','x','e','f','d']extend_num_list = num_list.extend(['g','r'])print('extend:',num_list) # extend: ['a', 'b', 'x', 'e', 'f', 'd', 'g', 'r']#built-in methods: change original list, won't return new listprint('extend: append_num_list (before): ', extend_num_list) # extend: append_num_list (before): Noneextend_num_list = num_listprint('extend: append_num_list (after): ', extend_num_list) # extend: append_num_list (after): ['a', 'b', 'x', 'e', 'f', 'd', 'g', 'r'] 使用Append新增物件至List中，需注意： 其是用來新增一個物件，故當給予一個List時，其會直接把該List當成一個項目附加上去 Append屬於Built-in methods，故會直接改變原有的List，而不會回傳結果 1234567num_list = ['a','b','x','e','f','d']append_num_list = num_list.append(['g','r'])print('append:',num_list) # append: ['a', 'b', 'x', 'e', 'f', 'd', ['g', 'r']]#built-in methods: change original list, won't return new listprint('append: append_num_list (before): ', append_num_list) # append: append_num_list (before): Noneappend_num_list = num_listprint('append: append_num_list (after): ', append_num_list) # append: append_num_list (after): ['a', 'b', 'x', 'e', 'f', 'd', ['g', 'r']] 透過pop來取得List中項目，需注意： 如沒有傳入參數，則預設是回傳List最後一個item；否則，回傳指定的items 使用pop會將該項目從List中移除12345num_list = ['a','b','x','e','f','d']num_list.pop()print('pop:',num_list) # pop: ['a', 'b', 'x', 'e', 'f']pop_item = num_list.pop(1)print('pop:',num_list,', pop_item:',pop_item) # pop: ['a', 'x', 'e', 'f'] , pop_item: b 使用remove來移除指定的value，需注意 如有多個value符合，則會移除從頭數來的第一個 remove屬於Built-in methods，故會直接改變原有的List，而不會回傳結果123456num_list = ['a','b','x','e','f','d','b','a']new_remove_list = num_list.remove('x')print('remove:',num_list) # remove: ['a', 'b', 'e', 'f', 'd', 'b', 'a']print('remove:',new_remove_list) # remove: Nonenum_list.remove('a')print('remove:',num_list) # remove: ['b', 'e', 'f', 'd', 'b', 'a'] 透過index來取得value於List出現的位置，需注意： 當想要找的Item不在指定的搜尋範圍中時，其會跳出Exception，故要記得加上try…except避免程式的中斷123456num_list = ['a','b','x','e','f','d']print('index:',num_list.index('d',0,len(num_list))) # index: 5try: print('index:',num_list.index('d',0,3)) # index: exception happened: 'd' is not in listexcept Exception as e: print('index: exception happened:',e) 使用sort()與sorted()來排序List中的物件，需注意： sort()為Built-in methods，故會直接影響List內的排序，且不會回傳新的List sorted()為function，故不會改變原來的List，而是需要一個新的List來接收排序過後的List1234567891011121314num_list = ['a','b','x','e','f','d']num_list_1=num_list[:]sorted(num_list_1)print('num_list:',num_list) # num_list: ['a', 'b', 'x', 'e', 'f', 'd']print('num_list_1:',num_list_1) # num_list_1: ['a', 'b', 'x', 'e', 'f', 'd']new_num_list_1 = sorted(num_list_1)print('new_num_list_1:',new_num_list_1) # new_num_list_1: ['a', 'b', 'd', 'e', 'f', 'x']num_list_2 = num_list[:]num_list_2.sort()print('num_list:',num_list) # num_list: ['a', 'b', 'x', 'e', 'f', 'd']print('num_list_2:',num_list_2) # num_list_2: ['a', 'b', 'd', 'e', 'f', 'x']#built-in methods: change original list, won't return new listprint('num_list_2:',num_list_2.sort()) # num_list_2: None 利用join()與split()來拆解string成為List與合併List成為string，需注意： join()是由串接的字元來呼叫，並且傳入想要合併的List split()則是由目標的List來呼叫，並且傳入拆解的字元12345str_list = ['hi','my','name','is','ray']join_string = ' '.join(str_list)print('join:',join_string) # join: hi my name is raysplit_string = join_string.split(' ')print(split_string) # ['hi', 'my', 'name', 'is', 'ray'] 使用Unpacking來指定List中各item對應的變數名稱，需注意： 可以透過指標的方式來將List中連續的item指定給他，其方式可以參考下面123456a, b, c , *other, d = [1,2,3,4,5,6,7,8,9]print(a) # 1print(b) # 2print(c) # 3print(other) # [4, 5, 6, 7, 8]print(d) # 9]]></content>
@@ -122,8 +134,8 @@
       </categories>
       <tags>
         <tag>Golang</tag>
-        <tag>TIL</tag>
         <tag>筆記</tag>
+        <tag>TIL</tag>
         <tag>etcd</tag>
       </tags>
   </entry>
